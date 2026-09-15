@@ -704,16 +704,28 @@ def main():
     open_contests = [c for c in all_contests if is_open_status(c.get("status")) is not False]
 
     bootstrapped = state.get("bootstrapped", False)
+    # Bounty-program tracking was added after contests/protocols already
+    # had real history — it needs its OWN bootstrap flag, or its first
+    # run (state.get("bootstrapped") already True from before this
+    # existed) treats every pre-existing program as "new" and blasts them
+    # all as one alert. (Exactly what happened once, 2026-09-15 — fixed
+    # here; that run's stale pending_new_bounty_programs was cleared by
+    # hand afterward.)
+    bounty_programs_bootstrapped = state.get("bounty_programs_bootstrapped", False)
 
     new_contests = [c for c in open_contests if c["id"] not in seen_contests]
     new_protocols = [p for p in protocols if p["id"] not in seen_protocols]
     new_bounty_programs = [b for b in bounty_programs if b["id"] not in seen_bounty_programs]
 
+    if not bounty_programs_bootstrapped:
+        print("[info] First run of bounty-program tracking — bootstrapping without alerting.")
+        new_bounty_programs = []
+        state["bounty_programs_bootstrapped"] = True
+
     if not bootstrapped:
         print("[info] First run — bootstrapping state without alerting.")
         new_contests = []
         new_protocols = []
-        new_bounty_programs = []
         state["bootstrapped"] = True
     else:
         # Only worth the extra page-loads when there's something to check.
