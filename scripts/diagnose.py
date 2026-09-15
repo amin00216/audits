@@ -7,14 +7,15 @@ invoked manually via the Diagnose workflow.
 """
 import asyncio
 import json
+import urllib.request
 
 from playwright.async_api import async_playwright
 
-TARGETS = {
-    # immunefi and sherlock already have clean JSON APIs identified from the
-    # first diagnostic pass — no need to keep rendering them with a browser.
-    "code4rena": "https://code4rena.com/audits",
-    "codehawks": "https://codehawks.cyfrin.io",
+TARGETS = {}
+
+API_TARGETS = {
+    "immunefi_api": "https://immunefi.com/public-api/bounties/assets/dice/?type=audit-competitions",
+    "sherlock_api": "https://audits.sherlock.xyz/api/contests?order_by_date=false&page=1&per_page=20",
 }
 
 
@@ -43,14 +44,36 @@ async def diagnose_one(browser, name, url):
     return {"calls": calls, "rendered_text_len": len(text) if text else None, "rendered_text": text}
 
 
+def fetch_api(url):
+    req = urllib.request.Request(url, headers={
+        "User-Agent": "Mozilla/5.0 (compatible; AuditMonitorBot/1.0)",
+        "Accept": "application/json",
+    })
+    try:
+        with urllib.request.urlopen(req, timeout=20) as resp:
+            body = resp.read().decode("utf-8", errors="replace")
+            try:
+                return {"status": resp.status, "json": json.loads(body)}
+            except Exception:
+                return {"status": resp.status, "text": body[:5000]}
+    except Exception as e:
+        return {"error": str(e)}
+
+
 async def main():
     results = {}
-    async with async_playwright() as p:
-        browser = await p.chromium.launch()
-        for name, url in TARGETS.items():
-            print(f"[diagnose] visiting {name} ({url})")
-            results[name] = await diagnose_one(browser, name, url)
-        await browser.close()
+    for name, url in API_TARGETS.items():
+        print(f"[diagnose] fetching {name} ({url})")
+        results[name] = fetch_api(url)
+
+    if TARGETS:
+        async with async_playwright() as p:
+            browser = await p.chromium.launch()
+            for name, url in TARGETS.items():
+                print(f"[diagnose] visiting {name} ({url})")
+                results[name] = await diagnose_one(browser, name, url)
+            await browser.close()
+
     with open("diagnose-output.json", "w") as f:
         json.dump(results, f, indent=2)
     print("[diagnose] wrote diagnose-output.json")
