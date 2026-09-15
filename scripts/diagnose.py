@@ -25,7 +25,11 @@ import urllib.request
 
 from playwright.async_api import async_playwright
 
-TARGETS = {}
+TARGETS = {
+    "hackerone_newest": "https://hackerone.com/opportunities/all/search?bbp=true&ordering=Newest+programs",
+    "immunefi_bounties_sorted": "https://immunefi.com/bug-bounty/",
+    "hackenproof_sorted": "https://hackenproof.com/programs",
+}
 API_TARGETS = {}
 SEARCH_TESTS = {}
 
