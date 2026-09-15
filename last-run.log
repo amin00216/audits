@@ -1,5 +1,3 @@
-Errors:
-Immunefi: page returned no usable data (JS-rendered, no __NEXT_DATA__ found) — manual check needed at https://immunefi.com/audit-competition/
-Code4rena: page returned no usable data (JS-rendered, no __NEXT_DATA__ found) — manual check needed at https://code4rena.com/audits
-Sherlock: page returned no usable data (JS-rendered, no __NEXT_DATA__ found) — manual check needed at https://audits.sherlock.xyz/contests
-CodeHawks: page returned no usable data (JS-rendered, no __NEXT_DATA__ found) — manual check needed at https://codehawks.cyfrin.io
+[warn] TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID not set — skipping send:
+🆕 <b>New audit activity detected</b>
+• <b>Rujira</b> (Code4rena) — 💰 $40,000 in USDC — ⏰ ends 16 Dec 2025 8:00 PM - 16 Jan 8:00 PM
