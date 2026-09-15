@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-09-15T15:23:06.891278+00:00",
+  "last_digest_at": "2026-09-15T20:45:42.595365+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -911,6 +911,7 @@
     "defillama:ouroboros-capital",
     "defillama:outcome-finance",
     "defillama:overnight-finance",
+    "defillama:overtime",
     "defillama:p2pb2b",
     "defillama:pac-finance",
     "defillama:pacifica-perps",
