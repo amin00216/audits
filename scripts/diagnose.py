@@ -12,15 +12,15 @@ import urllib.request
 from playwright.async_api import async_playwright
 
 TARGETS = {
-    # the "dice" API turned out to return an empty carousel, not the real
-    # listing — fall back to rendering the page like code4rena/codehawks.
-    "immunefi": "https://immunefi.com/audit-competition/",
+    # investigating whether new DeFi protocols already have a bug bounty
+    # registered (separate concern from the audit-*contest* scanning above)
+    "immunefi_bounties": "https://immunefi.com/bug-bounty/",
+    "hackenproof_programs": "https://hackenproof.com/programs",
+    "cantina_bounties": "https://cantina.xyz/bounties",
+    "sherlock_bounties": "https://audits.sherlock.xyz/bug-bounties",
 }
 
-API_TARGETS = {
-    "immunefi_count_api": "https://immunefi.com/api/audit-competition/count/",
-    "sherlock_api": "https://audits.sherlock.xyz/api/contests?order_by_date=false&page=1&per_page=20",
-}
+API_TARGETS = {}
 
 
 async def diagnose_one(browser, name, url):
