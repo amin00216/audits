@@ -1,0 +1,5 @@
+Errors:
+Immunefi: page returned no usable data (JS-rendered, no __NEXT_DATA__ found) — manual check needed at https://immunefi.com/audit-competition/
+Code4rena: page returned no usable data (JS-rendered, no __NEXT_DATA__ found) — manual check needed at https://code4rena.com/audits
+Sherlock: page returned no usable data (JS-rendered, no __NEXT_DATA__ found) — manual check needed at https://audits.sherlock.xyz/contests
+CodeHawks: page returned no usable data (JS-rendered, no __NEXT_DATA__ found) — manual check needed at https://codehawks.cyfrin.io
