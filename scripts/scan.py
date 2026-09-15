@@ -41,7 +41,7 @@ UA = "Mozilla/5.0 (compatible; AuditMonitorBot/1.0; +https://github.com/amin0021
 OPEN_STATUSES = {"live", "active", "upcoming", "open", "ongoing", "starting"}
 CLOSED_STATUSES = {
     "judging", "evaluating", "finished", "closed", "ended", "completed",
-    "review", "mitigation", "submissions closed",
+    "review", "mitigation", "submissions closed", "report in progress",
 }
 
 
