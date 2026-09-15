@@ -12,12 +12,13 @@ import urllib.request
 from playwright.async_api import async_playwright
 
 TARGETS = {
-    # investigating whether new DeFi protocols already have a bug bounty
-    # registered (separate concern from the audit-*contest* scanning above)
-    "immunefi_bounties": "https://immunefi.com/bug-bounty/",
-    "hackenproof_programs": "https://hackenproof.com/programs",
-    "cantina_bounties": "https://cantina.xyz/bounties",
-    "sherlock_bounties": "https://audits.sherlock.xyz/bug-bounties",
+    # test whether each platform's bounty-program search is URL-drivable,
+    # using known-positive test names (Cetus is on HackenProof, Lombard
+    # Finance is on Immunefi, both seen in the unfiltered first-page list)
+    "immunefi_search_cetus": "https://immunefi.com/bug-bounty/?search=Cetus",
+    "immunefi_search_lombard": "https://immunefi.com/bug-bounty/?search=Lombard",
+    "hackenproof_search_cetus": "https://hackenproof.com/programs?search=Cetus",
+    "hackenproof_search_nonsense": "https://hackenproof.com/programs?search=Zzzznonexistentprotocolxyz",
 }
 
 API_TARGETS = {}
