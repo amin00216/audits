@@ -80,15 +80,19 @@ def get_json(url, headers=None):
 _BROWSER = None
 
 
+def _get_browser():
+    global _BROWSER
+    if _BROWSER is None:
+        _pw = sync_playwright().start()
+        _BROWSER = _pw.chromium.launch()
+    return _BROWSER
+
+
 def get_rendered_text(url):
     """Render `url` with a headless browser and return the visible body
     text, or None on failure. Reuses one browser instance across calls."""
-    global _BROWSER
     try:
-        if _BROWSER is None:
-            _pw = sync_playwright().start()
-            _BROWSER = _pw.chromium.launch()
-        page = _BROWSER.new_page()
+        page = _get_browser().new_page()
         page.goto(url, wait_until="networkidle", timeout=45000)
         page.wait_for_timeout(2500)
         text = page.inner_text("body")
@@ -97,6 +101,49 @@ def get_rendered_text(url):
     except Exception as e:
         print(f"[warn] render {url} failed: {e}", file=sys.stderr)
         return None
+
+
+def get_rendered_text_and_links(url):
+    """Like get_rendered_text, but also returns every on-page <a href> as
+    [{text, href}], so a listing's display name can be matched back to its
+    real deep link (the sites scraped here have no clean per-item URL in
+    their visible text alone)."""
+    try:
+        page = _get_browser().new_page()
+        page.goto(url, wait_until="networkidle", timeout=45000)
+        page.wait_for_timeout(2500)
+        text = page.inner_text("body")
+        links = page.eval_on_selector_all(
+            "a[href]",
+            "els => els.map(e => ({text: e.innerText.trim(), href: e.href}))"
+            ".filter(l => l.text.length > 0)",
+        )
+        page.close()
+        return text, links
+    except Exception as e:
+        print(f"[warn] render {url} failed: {e}", file=sys.stderr)
+        return None, []
+
+
+def find_link_for_name(links, name, path_hint=None):
+    """Best-effort match of a card's display name back to its href, among
+    all links captured on the page. Prefers an exact text match; falls
+    back to substring containment. path_hint filters to hrefs containing
+    that substring first (e.g. "/audits/"), to avoid matching nav links."""
+    name_l = name.strip().lower()
+    pools = []
+    if path_hint:
+        pools.append([l for l in links if path_hint in l["href"]])
+    pools.append(links)
+    for pool in pools:
+        for l in pool:
+            if l["text"].strip().lower() == name_l:
+                return l["href"]
+        for l in pool:
+            t = l["text"].strip().lower()
+            if t and (t in name_l or name_l in t):
+                return l["href"]
+    return None
 
 
 def lines_of(text):
@@ -109,32 +156,39 @@ IMMUNEFI_SEARCH_SELECTOR = "input[type='search'], input[placeholder*='earch' i]"
 def check_immunefi_bounty(protocol_name):
     """Search immunefi.com/bug-bounty/ for `protocol_name` using the site's
     real search box (URL query params don't filter it — confirmed via
-    diagnose.py). Returns True (found), False (confirmed not found), or
-    None (couldn't check — treat as unknown, not as "not found")."""
-    global _BROWSER
+    diagnose.py). Returns (True, bounty_url), (False, None) confirmed not
+    found, or (None, None) if the check itself failed — treat as unknown,
+    never as "not found"."""
     try:
-        if _BROWSER is None:
-            _pw = sync_playwright().start()
-            _BROWSER = _pw.chromium.launch()
-        page = _BROWSER.new_page()
+        page = _get_browser().new_page()
         page.goto("https://immunefi.com/bug-bounty/", wait_until="networkidle", timeout=45000)
         page.wait_for_timeout(1500)
         box = page.locator(IMMUNEFI_SEARCH_SELECTOR).first
         if box.count() == 0:
             page.close()
-            return None
+            return None, None
         box.click()
         box.fill(protocol_name)
         page.wait_for_timeout(2500)
         text = page.inner_text("body")
-        page.close()
         m = re.search(r"View (\d+) Bounties", text)
         if not m:
-            return None
-        return int(m.group(1)) > 0
+            page.close()
+            return None, None
+        if int(m.group(1)) == 0:
+            page.close()
+            return False, None
+        links = page.eval_on_selector_all(
+            "a[href*='/bug-bounty/']",
+            "els => els.map(e => ({text: e.innerText.trim(), href: e.href}))"
+            ".filter(l => l.text.length > 0)",
+        )
+        page.close()
+        bounty_url = find_link_for_name(links, protocol_name)
+        return True, bounty_url
     except Exception as e:
         print(f"[warn] Immunefi bounty check for {protocol_name!r} failed: {e}", file=sys.stderr)
-        return None
+        return None, None
 
 
 # ---------------------------------------------------------------- sources --
@@ -153,6 +207,7 @@ def scan_cantina():
         if not isinstance(c, dict):
             continue
         name = c.get("title") or c.get("name") or c.get("slug") or "?"
+        comp_id = c.get("id") or c.get("slug")
         listings.append({
             "platform": platform,
             "name": str(name)[:120],
@@ -160,8 +215,8 @@ def scan_cantina():
             "chain": c.get("chain"),
             "end": c.get("endDate") or c.get("deadline"),
             "status": str(c.get("status", "")).lower() or "live",  # present in currentCompetitions => open
-            "id": f"{platform}:{c.get('slug') or c.get('id') or name}",
-            "url": "https://cantina.xyz/competitions",
+            "id": f"{platform}:{comp_id or name}",
+            "url": f"https://cantina.xyz/competitions/{comp_id}" if comp_id else "https://cantina.xyz/competitions",
         })
     return listings, None
 
@@ -222,7 +277,7 @@ def scan_defillama(min_tvl=1_000_000):
 def scan_immunefi():
     platform = "Immunefi"
     url = "https://immunefi.com/audit-competition/"
-    text = get_rendered_text(url)
+    text, links = get_rendered_text_and_links(url)
     if text is None:
         return [], f"{platform}: render failed — {url}"
     ln = lines_of(text)
@@ -244,6 +299,7 @@ def scan_immunefi():
                 name = cand
                 break
             if name:
+                item_url = find_link_for_name(links, name, path_hint="/audit-competition/") or url
                 listings.append({
                     "platform": platform,
                     "name": name[:120],
@@ -252,7 +308,7 @@ def scan_immunefi():
                     "end": ln[i + 3] if i + 3 < len(ln) else None,
                     "status": status.lower(),
                     "id": f"{platform}:{name}",
-                    "url": url,
+                    "url": item_url,
                 })
             i += 3
         else:
@@ -274,7 +330,7 @@ PRIZE_RE = re.compile(r"^\$[\d,]+")
 def scan_code4rena():
     platform = "Code4rena"
     url = "https://code4rena.com/audits"
-    text = get_rendered_text(url)
+    text, links = get_rendered_text_and_links(url)
     if text is None:
         return [], f"{platform}: render failed — {url}"
     ln = lines_of(text)
@@ -306,6 +362,7 @@ def scan_code4rena():
                 prize = ln[j]
             if prize and end:
                 break
+        item_url = find_link_for_name(links, name, path_hint="/audits/") or url
         listings.append({
             "platform": platform,
             "name": name[:120],
@@ -314,7 +371,7 @@ def scan_code4rena():
             "end": end,
             "status": status,
             "id": f"{platform}:{name}",
-            "url": url,
+            "url": item_url,
         })
     if not listings:
         return [], f"{platform}: rendered OK but no listing-shaped entries found — needs a parser re-tune, check {url}"
@@ -328,7 +385,7 @@ CODEHAWKS_END_MARKER = "quick actions"
 def scan_codehawks():
     platform = "CodeHawks"
     url = "https://codehawks.cyfrin.io"
-    text = get_rendered_text(url)
+    text, links = get_rendered_text_and_links(url)
     if text is None:
         return [], f"{platform}: render failed — {url}"
     ln = lines_of(text)
@@ -359,6 +416,7 @@ def scan_codehawks():
             if j - 1 >= 0:
                 name = ln[j - 1]
         if name:
+            item_url = find_link_for_name(links, name, path_hint="/c/") or url
             listings.append({
                 "platform": platform,
                 "name": name[:120],
@@ -367,7 +425,7 @@ def scan_codehawks():
                 "end": None,
                 "status": status,
                 "id": f"{platform}:{name}",
-                "url": url,
+                "url": item_url,
             })
     if not listings:
         return [], f"{platform}: rendered OK but no listing-shaped entries found — needs a parser re-tune, check {url}"
@@ -438,19 +496,25 @@ def fmt_contest(c):
         bits.append(f"⛓ {c['chain']}")
     if c.get("end"):
         bits.append(f"⏰ ends {c['end']}")
-    return " — ".join(bits)
+    line = " — ".join(bits)
+    if c.get("url"):
+        line += f"\n   {c['url']}"
+    return line
 
 
 def fmt_protocol(p, with_bounty_check=False):
+    # No link here on purpose — the DefiLlama protocol page isn't a bounty
+    # program or contest, just a TVL listing, so it would be misleading to
+    # present it as one.
     tvl = p.get("tvl")
     tvl_s = f"${tvl/1e6:.1f}M" if tvl else "?"
     line = f"<b>{p['name']}</b> — {p.get('category','?')} — {tvl_s} TVL — {p.get('chain','?')}"
-    if p.get("url"):
-        line += f"\n   {p['url']}"
     if with_bounty_check:
         verdict = p.get("immunefi_bounty")
         if verdict is True:
             line += "\n   ✅ has an Immunefi bounty"
+            if p.get("immunefi_bounty_url"):
+                line += f"\n   {p['immunefi_bounty_url']}"
         elif verdict is False:
             line += (f"\n   ⚠️ no Immunefi bounty found — check manually: "
                      f"HackenProof (https://hackenproof.com/programs), "
@@ -502,7 +566,9 @@ def main():
         # so a None (couldn't check) is reported as unknown, never as
         # "no bounty found".
         for p in new_protocols:
-            p["immunefi_bounty"] = check_immunefi_bounty(p["name"])
+            found, bounty_url = check_immunefi_bounty(p["name"])
+            p["immunefi_bounty"] = found
+            p["immunefi_bounty_url"] = bounty_url
 
     if _BROWSER is not None:
         try:
