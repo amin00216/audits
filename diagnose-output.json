@@ -1,0 +1,556 @@
+{
+  "immunefi": {
+    "calls": [
+      {
+        "url": "https://immunefi.com/public-api/bounties/assets/dice?type=audit-competitions",
+        "status": 308,
+        "type": "xhr",
+        "content_type": "application/json"
+      },
+      {
+        "url": "https://immunefi.com/api/audit-competition/count",
+        "status": 308,
+        "type": "xhr",
+        "content_type": "application/json"
+      },
+      {
+        "url": "https://immunefi.com/monitoring/?o=609579&p=4505363965214720&r=us",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "application/json"
+      },
+      {
+        "url": "https://immunefi.com/?_rsc=aYNcuUMiejTIR3uI",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/monitoring/?o=609579&p=4505363965214720&r=us",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "application/json"
+      },
+      {
+        "url": "https://immunefi.com/audits/?_rsc=aYNcuUMiejTIR3uI",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/bug-bounty-program/?_rsc=aYNcuUMiejTIR3uI",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/pr-reviews/?_rsc=aYNcuUMiejTIR3uI",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/api/audit-competition/count/",
+        "status": 200,
+        "type": "xhr",
+        "content_type": "application/json"
+      },
+      {
+        "url": "https://immunefi.com/safe-harbor/?_rsc=aYNcuUMiejTIR3uI",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/invite-only-program/?_rsc=aYNcuUMiejTIR3uI",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/audit-competitions/?_rsc=aYNcuUMiejTIR3uI",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/vaults/?_rsc=aYNcuUMiejTIR3uI",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/managed-triage/?_rsc=aYNcuUMiejTIR3uI",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/hacker-pledging/?_rsc=aYNcuUMiejTIR3uI",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/studio/?_rsc=aYNcuUMiejTIR3uI",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/allstars/?_rsc=aYNcuUMiejTIR3uI",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/public-api/bounties/assets/dice/?type=audit-competitions",
+        "status": 200,
+        "type": "xhr",
+        "content_type": "application/json"
+      },
+      {
+        "url": "https://immunefi.com/leaderboard/?_rsc=aYNcuUMiejTIR3uI",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/immunefi-top-10/?_rsc=aYNcuUMiejTIR3uI",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/hall-of-fame/?_rsc=aYNcuUMiejTIR3uI",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/learn/?_rsc=aYNcuUMiejTIR3uI",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/responsible-publication/?_rsc=aYNcuUMiejTIR3uI",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/bug-bounty/?_rsc=aYNcuUMiejTIR3uI",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/audit-competition/audit-competition-ens/information/?_rsc=aYNcuUMiejTIR3uI",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/audit-competition/audit-comp-firelight-1/information/?_rsc=aYNcuUMiejTIR3uI",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/audit-competition/firedancer-v1-audit-comp/information/?_rsc=aYNcuUMiejTIR3uI",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/audit-competition/audit-comp-quantus/information/?_rsc=aYNcuUMiejTIR3uI",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/?_rsc=BU2ddFmQvBB03QKq",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/bug-bounty-program/?_rsc=BU2ddFmQvBB03QKq",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/pr-reviews/?_rsc=BU2ddFmQvBB03QKq",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/audits/?_rsc=BU2ddFmQvBB03QKq",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/audit-competitions/?_rsc=BU2ddFmQvBB03QKq",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/safe-harbor/?_rsc=BU2ddFmQvBB03QKq",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/invite-only-program/?_rsc=BU2ddFmQvBB03QKq",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/managed-triage/?_rsc=BU2ddFmQvBB03QKq",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/vaults/?_rsc=BU2ddFmQvBB03QKq",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/hacker-pledging/?_rsc=BU2ddFmQvBB03QKq",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/studio/?_rsc=BU2ddFmQvBB03QKq",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/allstars/?_rsc=BU2ddFmQvBB03QKq",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/learn/?_rsc=BU2ddFmQvBB03QKq",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/immunefi-top-10/?_rsc=BU2ddFmQvBB03QKq",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/leaderboard/?_rsc=BU2ddFmQvBB03QKq",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/hall-of-fame/?_rsc=BU2ddFmQvBB03QKq",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/responsible-publication/?_rsc=BU2ddFmQvBB03QKq",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/audit-competition/?_rsc=BU2ddFmQvBB03QKq",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/bug-bounty/?_rsc=BU2ddFmQvBB03QKq",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/audit-competition/audit-competition-ens/information/?_rsc=BU2ddFmQvBB03QKq",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/audit-competition/audit-comp-firelight-1/information/?_rsc=BU2ddFmQvBB03QKq",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/audit-competition/audit-comp-quantus/information/?_rsc=BU2ddFmQvBB03QKq",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/audit-competition/audit-comp-base-azul/information/?_rsc=BU2ddFmQvBB03QKq",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/audit-competition/firedancer-v1-audit-comp/information/?_rsc=BU2ddFmQvBB03QKq",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://immunefi.com/cookie-policy/?_rsc=BU2ddFmQvBB03QKq",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      }
+    ],
+    "rendered_text_len": 8265
+  },
+  "code4rena": {
+    "calls": [
+      {
+        "url": "https://code4rena.com/?_rsc=1rg0i",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://code4rena.com/login?redirect=%2Faudits&_rsc=1rg0i",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://code4rena.com/help?_rsc=1rg0i",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://code4rena.com/audits/2026-04-monetrix?_rsc=1rg0i",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://code4rena.com/audits/2025-12-rujira?_rsc=1rg0i",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://code4rena.com/api/v1/users/@me",
+        "status": 401,
+        "type": "fetch",
+        "content_type": "application/json; charset=utf-8"
+      },
+      {
+        "url": "https://code4rena.com/audits/2026-04-intuition-mitigation-review?_rsc=1rg0i",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://code4rena.com/audits/2026-04-k2?_rsc=1rg0i",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://code4rena.com/audits/2026-04-layerzero-stellar-endpoint?_rsc=1rg0i",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://code4rena.com/audits/2026-03-swafe-mitigation-review-round-2?_rsc=1rg0i",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://code4rena.com/audits/2026-03-swafe-mitigation-review?_rsc=1rg0i",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://api.web3modal.org/appkit/v1/project-limits?projectId=7f99093c3fe01dc070059530f93e8ab3&st=appkit&sv=html-core-1.8.17-wc-circular-dependencies-fix.0",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "application/json; charset=UTF-8"
+      }
+    ],
+    "rendered_text_len": 11351
+  },
+  "sherlock": {
+    "calls": [
+      {
+        "url": "https://audits.sherlock.xyz/bug-bounties?_rsc=185n5",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://audits.sherlock.xyz/connect?_rsc=185n5",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://audits.sherlock.xyz/contests?tab=all&_rsc=ldlg9",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://audits.sherlock.xyz/contests?tab=upcoming&_rsc=ldlg9",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://analytics.google.com/g/collect?v=2&tid=G-GDYH0NV24Z&gtm=45je69b1v9246491568za200zd9246491568&_p=1789460208557&_gaz=1&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=AAAAACAC&are=1&cid=790456260.1789460209&frm=0&ibt=1&ngs=1&pscdl=noapi&rcb=10&sr=1280x720&uaa=x86&uab=64&uafvl=Not%253DA%253FBrand%3B99.0.0.0%7CHeadlessChrome%3B151.0.7922.34%7CChromium%3B151.0.7922.34&uam=&uamb=0&uap=Linux&uapv=&uaw=0&ul=en-us&_s=1&tag_exp=115938466~115938469~118897920~118897930~120213116~120385422~120469145~120469153~120912438&sid=1789460208&sct=1&seg=0&dl=https%3A%2F%2Faudits.sherlock.xyz%2Fcontests&dt=Contests%20-%20All&en=page_view&_fv=1&_nsi=1&_ss=1&_ee=1&tfd=810",
+        "status": 204,
+        "type": "fetch",
+        "content_type": "text/plain"
+      },
+      {
+        "url": "https://audits.sherlock.xyz/leaderboards?_rsc=185n5",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://audits.sherlock.xyz/contests?_rsc=185n5",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://audits.sherlock.xyz/contests?tab=judging-contests&_rsc=ldlg9",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://audits.sherlock.xyz/contests?tab=escalations&_rsc=ldlg9",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://audits.sherlock.xyz/contests?tab=sherlock-judging&_rsc=ldlg9",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://audits.sherlock.xyz/contests?tab=active&_rsc=ldlg9",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://audits.sherlock.xyz/contests/1140?_rsc=185n5",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://audits.sherlock.xyz/contests/38?_rsc=185n5",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://audits.sherlock.xyz/contests/205?_rsc=185n5",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://audits.sherlock.xyz/contests/1260?_rsc=185n5",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://audits.sherlock.xyz/contests?tab=finished&_rsc=ldlg9",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://audits.sherlock.xyz/contests/333?_rsc=185n5",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "text/x-component"
+      },
+      {
+        "url": "https://explorer-api.walletconnect.com/w3m/v1/getDesktopListings?projectId=67c86b4ce6dac476f6f20f41c4ef0364&sdkType=wcm&sdkVersion=js-2.6.2&page=1&entries=9&version=2",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "application/json; charset=utf-8"
+      },
+      {
+        "url": "https://audits.sherlock.xyz/api/contests?order_by_date=false&page=1&per_page=10",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "application/json"
+      },
+      {
+        "url": "https://audits.sherlock.xyz/api/contests/stats",
+        "status": 200,
+        "type": "fetch",
+        "content_type": "application/json"
+      }
+    ],
+    "rendered_text_len": 1272
+  },
+  "codehawks": {
+    "calls": [
+      {
+        "url": "https://www.google.com/rmkt/collect/11319840811/?random=1789460214941&cv=11&fst=1789460214941&fmt=8&bg=ffffff&guid=ON&async=1&en=gtag.config&gtm=45je69b1h1v9152326239za200zd9152326239xec&gcd=13l3l3l3l1l1&dma=0&tag_exp=115616986~115938466~115938469~117776795~118131809~118897920~118897930~120213116~120385423~120469145~120469153~120912438&u_w=1280&u_h=720&url=https%3A%2F%2Fcodehawks.cyfrin.io%2Fcontests&rcb=5&frm=0&tiba=Cyfrin%20CodeHawks%20%7C%20Competitive%20Audits&hn=www.googleadservices.com&npa=0&pscdl=noapi&auid=1104504971.1789460215&uaa=x86&uab=64&uafvl=Not%253DA%253FBrand%3B99.0.0.0%7CHeadlessChrome%3B151.0.7922.34%7CChromium%3B151.0.7922.34&uamb=0&uam=&uap=Linux&uapv=&uaw=0&data=event%3Dgtag.config&ept=68&gcp=5",
+        "status": 200,
+        "type": "fetch",
+        "content_type": ""
+      },
+      {
+        "url": "https://ad.doubleclick.net/ccm/s/collect?auid=1104504971.1789460215&gtm=45je69b1h1v9152326239za200zd9152326239xec&fmt=8",
+        "status": 204,
+        "type": "fetch",
+        "content_type": ""
+      },
+      {
+        "url": "https://www.google.com/ccm/collect?rcb=5&frm=0&apvc=1&auid=1104504971.1789460215&dt=Cyfrin%20CodeHawks%20%7C%20Competitive%20Audits&tid=AW-11319840811&en=page_view&dl=https%3A%2F%2Fcodehawks.cyfrin.io%2Fcontests&scrsrc=www.googletagmanager.com&rnd=944386147.1789460215&navt=n&npa=0&gtm=45je69b1h1v9152326239za200zd9152326239xec&gcd=13l3l3l3l1l1&dma=0&tag_exp=115616986~115938466~115938469~117776795~118131809~118897920~118897930~120213116~120385423~120469145~120469153~120912438&tft=1789460214966&tfd=1604&tids=AW-11319840811&fmt=8",
+        "status": 200,
+        "type": "fetch",
+        "content_type": ""
+      },
+      {
+        "url": "https://analytics.google.com/g/collect?v=2&tid=G-4EYV1MDWQC&gtm=45je69b1h1v9152326239za200zd9152326239&_p=1789460214719&_gaz=1&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=AAAAACAC&are=1&cid=77823176.1789460215&frm=0&ibt=1&ngs=1&pscdl=noapi&rcb=5&sr=1280x720&uaa=x86&uab=64&uafvl=Not%253DA%253FBrand%3B99.0.0.0%7CHeadlessChrome%3B151.0.7922.34%7CChromium%3B151.0.7922.34&uam=&uamb=0&uap=Linux&uapv=&uaw=0&ul=en-us&_s=1&tag_exp=115616986~115938466~115938469~118897920~118897930~120213116~120385423~120469145~120469153~120912438&sid=1789460214&sct=1&seg=0&dl=https%3A%2F%2Fcodehawks.cyfrin.io%2Fcontests&dt=Cyfrin%20CodeHawks%20%7C%20Competitive%20Audits&en=page_view&_fv=1&_nsi=1&_ss=1&_ee=1&tfd=1577",
+        "status": 204,
+        "type": "fetch",
+        "content_type": "text/plain"
+      }
+    ],
+    "rendered_text_len": 6106
+  }
+}
