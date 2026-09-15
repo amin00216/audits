@@ -1,7 +1,18 @@
 {
   "bootstrapped": true,
   "last_digest_at": "2026-09-15T13:45:12.158096+00:00",
-  "pending_new_protocols": [],
+  "pending_new_protocols": [
+    {
+      "category": "Dexs",
+      "chain": "Aleo",
+      "id": "defillama:shield-swap",
+      "immunefi_bounty": false,
+      "name": "Shield Swap",
+      "platform": "DefiLlama",
+      "tvl": 1737309.456698654,
+      "url": "https://defillama.com/protocol/shield-swap"
+    }
+  ],
   "seen_contests": [
     "Cantina:3709ca85-4050-407e-9b36-51f5d5ea9b00",
     "Cantina:4d285eee-602e-440a-845e-25e155cec26a",
@@ -1062,6 +1073,7 @@
     "defillama:shape-bridge",
     "defillama:sharpbyte-capital",
     "defillama:shibaswap-v1",
+    "defillama:shield-swap",
     "defillama:shmonad",
     "defillama:shui",
     "defillama:sierra-protocol",
