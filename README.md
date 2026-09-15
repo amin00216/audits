@@ -1,21 +1,24 @@
 # Audit & Bounty Monitor
 
-Scans Immunefi, Code4rena, Sherlock, Cantina and CodeHawks for open audit
-contests, DefiLlama for newly-listed DeFi protocols with >= $1M TVL, and
-HackerOne + HackenProof for newly-*launched* ongoing bug bounty programs
-(separate from the time-boxed contests above — see "Newest bounty
-programs" below). Each newly-detected protocol is also automatically
-checked against Immunefi's bug-bounty list (verified reliable — see
-below); the alert says explicitly whether one was found rather than just
-flagging TVL and leaving the check entirely manual. Posts to a Telegram
-group: an immediate alert the moment something new shows up, plus a
-consolidated status update every 4 hours.
+Posts to a Telegram group whenever something with a real, verifiable
+**"landed" signal** appears:
+
+- **New open audit contests** — Immunefi, Code4rena, Sherlock, Cantina,
+  CodeHawks
+- **Newly-launched ongoing bug bounty programs** — HackerOne, HackenProof
+  (separate from the time-boxed contests above — see "Newest bounty
+  programs" below)
+
+An immediate alert fires the moment either happens, plus a consolidated
+status update every 4 hours.
+
+**DefiLlama's newly-≥$1M-TVL-protocol scan runs but doesn't message
+anything** (as of 2026-09-15) — see "Why protocol-TVL tracking was
+removed from alerting" below for why.
 
 **Links**: every open contest alert includes a real, contest-specific URL
 (not just the platform's generic listing page — see "Real contest links"
-below). Protocol alerts deliberately do *not* link to the DefiLlama
-protocol page, since that's just a TVL listing, not a bounty program or
-contest, and linking it would misrepresent what it is.
+below).
 
 Runs entirely inside GitHub Actions (`.github/workflows/audit-monitor.yml`)
 on a `*/30 * * * *` schedule, so it isn't dependent on any external
@@ -41,11 +44,16 @@ Then run the workflow once manually (Actions tab → Audit & Bounty Monitor
 
 ## How "new" detection works
 
-`state.json` at the repo root tracks every contest/protocol id the script
-has already seen, and is committed back by the workflow after each run.
-The **first ever run only seeds this state** — it will not blast every
-currently-open contest as "new"; only entries the script hasn't seen
-before will trigger an alert from then on.
+`state.json` at the repo root tracks every id the script has already
+seen (contests, bounty programs, and — though it no longer drives any
+message — DefiLlama protocols too), and is committed back by the
+workflow after each run. The **first ever run only seeds this state** —
+it will not blast every currently-open contest as "new"; only entries
+the script hasn't seen before will trigger an alert from then on. Each
+of the three tracked categories has its **own independent bootstrap
+flag** (`bootstrapped`, `bounty_programs_bootstrapped`) — reusing one
+flag for a category added later caused a real bug once (see "Newest
+bounty programs" below).
 
 ## Real contest links
 
@@ -61,29 +69,30 @@ match is found. Verified against live data (`LINK_MATCH_TEST` in
 `diagnose.py`): all 4 test names resolved to exactly the right contest
 URL.
 
-## Bug-bounty cross-check
+## Why protocol-TVL tracking was removed from alerting
 
-DefiLlama has no "listed at" field, so a newly-detected protocol is just
-whatever wasn't in `state.json` last run. Whether it already has a bug
-bounty is a separate question, checked against:
+`scan_defillama()` still runs every cycle and `seen_protocols` is still
+maintained, but as of 2026-09-15 it drives **no Telegram message at
+all** — not the immediate alert, not the digest.
 
-- **Immunefi — automated.** `check_immunefi_bounty()` in `scan.py` drives
-  the real search box at `immunefi.com/bug-bounty/` (its `?search=`
-  URL param does nothing — confirmed not to filter — so this types into
-  the actual input and reads "View N Bounties" back). Verified against
-  three known-positive names and one nonsense name before shipping; a
-  page-load failure reports as "couldn't check" (❓), never silently as
-  "not found".
-- **HackenProof — not automated.** Its search box *does* filter, but
-  returned zero results for a name confirmed present in the unfiltered
-  list (a false negative) during testing — not trustworthy enough to
-  report a verdict, so the alert just links to it for a manual look.
-- **Cantina, Sherlock — not automated.** Cantina's bounty page
-  (`cantina.xyz/bounties`, now branded `cantina.security`) never reached
-  network-idle in testing (constant analytics polling). Sherlock's
-  `/bug-bounties` page renders individual program links but no bulk
-  listing or API was found. Both just get a manual-check link in the
-  alert.
+The original design flagged any DefiLlama protocol newly crossing $1M
+TVL as "new", cross-checked it against Immunefi's bug-bounty list
+(`check_immunefi_bounty()` — still in `scan.py`, drives the real search
+box at `immunefi.com/bug-bounty/` since its `?search=` URL param is a
+no-op, confirmed accurate against 3 positive + 1 negative test case),
+and alerted either way. In practice this meant "new" only ever meant
+"just crossed our TVL floor" — DefiLlama has no launch-date field — and
+it mislabeled **Allbridge Classic**, live since July 2021, as a freshly
+landed protocol the moment its TVL ticked from just under to just over
+$1M. Since the whole point of this monitor is catching genuinely new
+things, a floor-crossing heuristic that flags 5-year-old protocols isn't
+good enough to message on.
+
+The code is kept (not deleted) so a better "new" heuristic — e.g. cross-
+referencing a protocol's actual first-seen date via a source that has
+one — can reuse `seen_protocols`'s history later. If reactivated, the
+same per-protocol Immunefi/HackenProof/Cantina/Sherlock bounty cross-
+check described in earlier versions of this README applies.
 
 ## Newest bounty programs
 
@@ -104,10 +113,10 @@ on DefiLlama (or is below the $1M TVL floor):
   per-program URL was found, so its alerts link to the listing page, not
   the specific program.
 - **Immunefi, Cantina, Sherlock — not included here.** Immunefi's bounty
-  list has no visible launch-date field to sort by (only "last updated");
-  it's still covered by the reactive per-protocol check above. Cantina
-  and Sherlock have the same automation gaps described under "Bug-bounty
-  cross-check".
+  list has no visible launch-date field to sort by (only "last updated").
+  Cantina's bounty page never reached network-idle in testing (constant
+  analytics polling). Sherlock's `/bug-bounties` page renders individual
+  program links but no bulk listing or API was found.
 
 Tracked with its own `seen_bounty_programs` / `bounty_programs_bootstrapped`
 state (deliberately separate from the contests/protocols `bootstrapped`

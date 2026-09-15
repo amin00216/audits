@@ -1,11 +1,20 @@
 #!/usr/bin/env python3
 """
-Audit-contest + new-protocol monitor.
+Audit-contest + bug-bounty-program monitor.
 
-Scans Immunefi, Code4rena, Sherlock, Cantina and CodeHawks for open audit
-contests, and DefiLlama for newly-listed DeFi protocols >= $1M TVL.
-Sends a Telegram alert immediately for anything new since the last run,
-and a consolidated status digest every DIGEST_INTERVAL_HOURS (default 4).
+Sends a Telegram alert immediately when something with a real, verifiable
+"landed" signal appears — a new open audit contest (Immunefi, Code4rena,
+Sherlock, Cantina, CodeHawks) or a newly-launched ongoing bug bounty
+program (HackerOne, HackenProof) — plus a consolidated status digest
+every DIGEST_INTERVAL_HOURS (default 4).
+
+DefiLlama's newly-≥$1M-TVL-protocol scan (scan_defillama) still runs and
+seen_protocols is still maintained, but deliberately does NOT drive any
+message: DefiLlama has no launch-date field, so "new" there only ever
+meant "just crossed our TVL floor", which mislabeled a ~5-year-old
+protocol (Allbridge Classic, 2026-09-15) as freshly landed. Left in
+place so a better "new" heuristic can reuse it later without
+re-bootstrapping the whole tracked set.
 
 State (state.json, committed back to the repo by the workflow) is what
 makes "new" detection possible across runs.
@@ -714,8 +723,16 @@ def main():
     bounty_programs_bootstrapped = state.get("bounty_programs_bootstrapped", False)
 
     new_contests = [c for c in open_contests if c["id"] not in seen_contests]
-    new_protocols = [p for p in protocols if p["id"] not in seen_protocols]
     new_bounty_programs = [b for b in bounty_programs if b["id"] not in seen_bounty_programs]
+    # protocols (from scan_defillama) are deliberately NOT part of
+    # alerting or the digest — DefiLlama has no launch-date field, so
+    # "new" here only ever meant "just crossed our $1M TVL floor", which
+    # can (and did — Allbridge Classic, live ~5 years, 2026-09-15)
+    # mislabel a long-established protocol as freshly landed. Messaging
+    # is reserved for things with a real "landed" signal: contests and
+    # bounty programs. seen_protocols is still maintained below so this
+    # can be re-enabled cleanly later with a better "new" heuristic
+    # without re-litigating the whole tracked set.
 
     if not bounty_programs_bootstrapped:
         print("[info] First run of bounty-program tracking — bootstrapping without alerting.")
@@ -725,18 +742,7 @@ def main():
     if not bootstrapped:
         print("[info] First run — bootstrapping state without alerting.")
         new_contests = []
-        new_protocols = []
         state["bootstrapped"] = True
-    else:
-        # Only worth the extra page-loads when there's something to check.
-        # Verified accurate against known positive/negative cases — see
-        # diagnose.py history — but the site could still change layout,
-        # so a None (couldn't check) is reported as unknown, never as
-        # "no bounty found".
-        for p in new_protocols:
-            found, bounty_url = check_immunefi_bounty(p["name"])
-            p["immunefi_bounty"] = found
-            p["immunefi_bounty_url"] = bounty_url
 
     if _BROWSER is not None:
         try:
@@ -744,24 +750,14 @@ def main():
         except Exception:
             pass
 
-    # Accumulate new protocols across runs so the once-daily digest can
-    # show what's genuinely new *today*, not just "biggest by TVL" (DefiLlama's
-    # API has no reliable listing-date field, so real "new" only exists via
-    # this run-to-run diff).
-    pending = {p["id"]: p for p in state.get("pending_new_protocols", [])}
-    for p in new_protocols:
-        pending[p["id"]] = p
-
     pending_bounties = {b["id"]: b for b in state.get("pending_new_bounty_programs", [])}
     for b in new_bounty_programs:
         pending_bounties[b["id"]] = b
 
-    if new_contests or new_protocols or new_bounty_programs:
+    if new_contests or new_bounty_programs:
         lines = ["\U0001F195 <b>New audit activity detected</b>"]
         for c in new_contests:
             lines.append("• " + fmt_contest(c))
-        for p in new_protocols:
-            lines.append("• \U0001F9EA " + fmt_protocol(p, with_bounty_check=True))
         for b in new_bounty_programs:
             lines.append("• \U0001F4B0 " + fmt_bounty_program(b))
         send_telegram("\n".join(lines))
@@ -785,16 +781,6 @@ def main():
         else:
             lines.append("none found")
         lines.append("")
-        recent_new = sorted(pending.values(), key=lambda x: -(x.get("tvl") or 0))
-        top5 = recent_new[:5]
-        header = f"<u>New protocols since last update ≥$1M TVL — top {len(top5)} of {len(recent_new)}</u>"
-        lines.append(header)
-        if recent_new:
-            for p in top5:
-                lines.append("• " + fmt_protocol(p, with_bounty_check=True))
-        else:
-            lines.append(f"none — {len(protocols)} total tracked, unchanged")
-        lines.append("")
         recent_bounties = sorted(
             pending_bounties.values(),
             key=lambda x: x.get("launched_at") or "", reverse=True,
@@ -815,11 +801,10 @@ def main():
                 lines.append("• " + e)
         send_telegram("\n".join(lines))
         state["last_digest_at"] = now.isoformat()
-        pending = {}  # reset accumulator after reporting
-        pending_bounties = {}
+        pending_bounties = {}  # reset accumulator after reporting
 
-    state["pending_new_protocols"] = list(pending.values())
     state["pending_new_bounty_programs"] = list(pending_bounties.values())
+    state.pop("pending_new_protocols", None)  # retired — protocols no longer drive any message
 
     state["seen_contests"] = sorted(seen_contests | {c["id"] for c in open_contests})
     state["seen_protocols"] = sorted(seen_protocols | {p["id"] for p in protocols})
