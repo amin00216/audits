@@ -1,1 +1,142 @@
-{}
+{
+  "link_match_test": {
+    "code4rena": {
+      "num_links": 67,
+      "matches": {
+        "Rujira": "https://code4rena.com/audits/2025-12-rujira",
+        "Monetrix": "https://code4rena.com/audits/2026-04-monetrix",
+        "K2": "https://code4rena.com/audits/2026-04-k2"
+      },
+      "sample_links": [
+        {
+          "text": "Skip Navigation",
+          "href": "https://code4rena.com/audits#skip-link"
+        },
+        {
+          "text": "Become a Warden",
+          "href": "https://code4rena.com/register/account"
+        },
+        {
+          "text": "Past audits",
+          "href": "https://code4rena.com/audits#completed-audits"
+        },
+        {
+          "text": "Bounties",
+          "href": "https://code4rena.com/bounties"
+        },
+        {
+          "text": "Past 90 days",
+          "href": "https://code4rena.com/leaderboard?timeframe=Last%2090%20days"
+        },
+        {
+          "text": "Past 365 days",
+          "href": "https://code4rena.com/leaderboard?timeframe=Last%20365%20days"
+        },
+        {
+          "text": "All time",
+          "href": "https://code4rena.com/leaderboard?timeframe=All%20time"
+        },
+        {
+          "text": "Reports",
+          "href": "https://code4rena.com/reports"
+        },
+        {
+          "text": "Help desk",
+          "href": "https://code4rena.com/help"
+        },
+        {
+          "text": "Docs",
+          "href": "https://docs.code4rena.com/"
+        },
+        {
+          "text": "Support",
+          "href": "https://code4rena.com/help"
+        },
+        {
+          "text": "Log in",
+          "href": "https://code4rena.com/login?redirect=%2Faudits"
+        },
+        {
+          "text": "Log in / Register",
+          "href": "https://code4rena.com/login?redirect=%2Faudits"
+        },
+        {
+          "text": "REPORT IN PROGRESS\nAUDIT\nRujira\nRujira is building the App Layer on THORChain, providing a fully integrated suite of DeFi applications, accessible with native assets from all connected chains.\nTHORChain\nCosmos\nRust\n16 Dec 2025 8:00 PM - 16 Jan 8:00 PM\n$40,000 in USDC",
+          "href": "https://code4rena.com/audits/2025-12-rujira"
+        },
+        {
+          "text": "COMPLETED\nAUDIT\nMonetrix\nYield layer for Hyperliquid, engineered to maximize capital efficiency by funneling all of Hyperliquid's yield sources into one stablecoin. It's the liquid entry point to capture full economic upside of the ecosystem through a unified, composable asset.\nHyperliquid\nSolidity\n24 Apr 8:00 PM - 04 May 8:00 PM\n$22,000 in USDC",
+          "href": "https://code4rena.com/audits/2026-04-monetrix"
+        }
+      ]
+    },
+    "codehawks": {
+      "num_links": 103,
+      "matches": {
+        "BattleChain Confidence Pools": "https://codehawks.cyfrin.io/c/2026-07-battlechain-confidence-pools"
+      },
+      "sample_links": [
+        {
+          "text": "Competitive Audits",
+          "href": "https://codehawks.cyfrin.io/contests"
+        },
+        {
+          "text": "First Flights",
+          "href": "https://codehawks.cyfrin.io/first-flights"
+        },
+        {
+          "text": "Leaderboard",
+          "href": "https://codehawks.cyfrin.io/leaderboard"
+        },
+        {
+          "text": "Docs",
+          "href": "https://support.cyfrin.io/codehawks/overview"
+        },
+        {
+          "text": "BattleChain Confidence Pools",
+          "href": "https://codehawks.cyfrin.io/c/2026-07-battlechain-confidence-pools"
+        },
+        {
+          "text": "View contest",
+          "href": "https://codehawks.cyfrin.io/c/2026-07-battlechain-confidence-pools"
+        },
+        {
+          "text": "Staking Part 2",
+          "href": "https://codehawks.cyfrin.io/c/2025-04-starknet-part-2"
+        },
+        {
+          "text": "View contest",
+          "href": "https://codehawks.cyfrin.io/c/2025-04-starknet-part-2"
+        },
+        {
+          "text": "RWA Part 2",
+          "href": "https://codehawks.cyfrin.io/c/2025-03-remora-2"
+        },
+        {
+          "text": "View contest",
+          "href": "https://codehawks.cyfrin.io/c/2025-03-remora-2"
+        },
+        {
+          "text": "Storage Proofs",
+          "href": "https://codehawks.cyfrin.io/c/2025-03-curve"
+        },
+        {
+          "text": "View contest",
+          "href": "https://codehawks.cyfrin.io/c/2025-03-curve"
+        },
+        {
+          "text": "USDO/CCIP",
+          "href": "https://codehawks.cyfrin.io/c/openeden"
+        },
+        {
+          "text": "View contest",
+          "href": "https://codehawks.cyfrin.io/c/openeden"
+        },
+        {
+          "text": "Cyfrin Attester",
+          "href": "https://codehawks.cyfrin.io/c/2025-03-cyfrin-attester"
+        }
+      ]
+    }
+  }
+}
