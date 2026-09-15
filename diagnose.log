@@ -1,4 +1,2 @@
-[diagnose] visiting hackerone_newest (https://hackerone.com/opportunities/all/search?bbp=true&ordering=Newest+programs)
-[diagnose] visiting immunefi_bounties_sorted (https://immunefi.com/bug-bounty/)
-[diagnose] visiting hackenproof_sorted (https://hackenproof.com/programs)
+[diagnose] capturing graphql for hackerone_graphql (https://hackerone.com/opportunities/all/search?bbp=true&ordering=Newest+programs)
 [diagnose] wrote diagnose-output.json
