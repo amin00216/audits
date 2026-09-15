@@ -1,4 +1,5 @@
-[diagnose] fetching immunefi_count_api (https://immunefi.com/api/audit-competition/count/)
-[diagnose] fetching sherlock_api (https://audits.sherlock.xyz/api/contests?order_by_date=false&page=1&per_page=20)
-[diagnose] visiting immunefi (https://immunefi.com/audit-competition/)
+[diagnose] visiting immunefi_bounties (https://immunefi.com/bug-bounty/)
+[diagnose] visiting hackenproof_programs (https://hackenproof.com/programs)
+[diagnose] visiting cantina_bounties (https://cantina.xyz/bounties)
+[diagnose] visiting sherlock_bounties (https://audits.sherlock.xyz/bug-bounties)
 [diagnose] wrote diagnose-output.json
