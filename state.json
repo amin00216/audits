@@ -3,19 +3,6 @@
   "bounty_programs_bootstrapped": true,
   "last_digest_at": "2026-09-15T15:23:06.891278+00:00",
   "pending_new_bounty_programs": [],
-  "pending_new_protocols": [
-    {
-      "category": "Bridge",
-      "chain": "Multi-Chain",
-      "id": "defillama:allbridge-classic",
-      "immunefi_bounty": false,
-      "immunefi_bounty_url": null,
-      "name": "Allbridge Classic",
-      "platform": "DefiLlama",
-      "tvl": 1032722.4795131616,
-      "url": "https://defillama.com/protocol/allbridge-classic"
-    }
-  ],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
     "HackenProof:Arcadia Finance Smart Contracts",
