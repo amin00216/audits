@@ -1,1 +1,0 @@
-[info] Resolved chat_id=-1004185621258 from getUpdates — set this as the TELEGRAM_CHAT_ID secret so future runs don't depend on getUpdates.
