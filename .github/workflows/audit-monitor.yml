@@ -17,7 +17,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: audit-monitor
+  group: audit-monitor-repo-writes
   cancel-in-progress: false
 
 jobs:
@@ -47,9 +47,15 @@ jobs:
           git config user.name "audit-monitor-bot"
           git config user.email "actions@users.noreply.github.com"
           git add state.json last-run.log
-          if ! git diff --cached --quiet; then
-            git commit -m "chore: update monitor state"
-            git push
-          else
+          if git diff --cached --quiet; then
             echo "No state changes."
+            exit 0
           fi
+          git commit -m "chore: update monitor state"
+          for i in 1 2 3 4 5; do
+            if git push; then exit 0; fi
+            echo "push rejected, retrying with rebase ($i/5)"
+            git pull --rebase origin main
+            sleep 3
+          done
+          exit 1
