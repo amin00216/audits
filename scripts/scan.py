@@ -10,21 +10,27 @@ and a consolidated daily digest once per UTC day (after DIGEST_HOUR_UTC).
 State (state.json, committed back to the repo by the workflow) is what
 makes "new" detection possible across runs.
 
-Known limitation: Code4rena / Sherlock / CodeHawks / Immunefi are scraped
-via a generic heuristic (look for a Next.js __NEXT_DATA__ blob, then find
-dict entries whose keys look like a contest listing). This was written
-without the ability to hit those sites live to verify exact field names —
-expect it to need a tuning pass against real output from the first run.
-Cantina and DefiLlama use documented JSON APIs and should be reliable
-from the start.
+Source techniques (verified against live output on 2026-09-15, see
+diagnose.py / diagnose-output.json in git history):
+  - Cantina, DefiLlama: documented JSON APIs, fetched directly.
+  - Sherlock: audits.sherlock.xyz/api/contests — clean undocumented but
+    stable-looking JSON API, fetched directly.
+  - Immunefi, Code4rena, CodeHawks: no usable API found (client-rendered
+    Next.js App Router apps with no discrete listing XHR). Rendered with
+    Playwright and parsed from the visible text via a line-pattern parser
+    tailored to each site's card layout. More fragile than a real API —
+    if a site's layout changes, this needs a re-tune (the digest will
+    name any source that fails to parse rather than silently going
+    quiet).
 """
 import json
 import os
 import re
 import sys
 import urllib.request
-import urllib.error
 from datetime import datetime, timezone
+
+from playwright.sync_api import sync_playwright
 
 STATE_PATH = os.path.join(os.path.dirname(__file__), "..", "state.json")
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
@@ -32,11 +38,22 @@ TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 DIGEST_HOUR_UTC = int(os.environ.get("DIGEST_HOUR_UTC", "8"))
 UA = "Mozilla/5.0 (compatible; AuditMonitorBot/1.0; +https://github.com/amin00216/audits)"
 
-OPEN_STATUSES = {"live", "active", "upcoming", "open", "ongoing"}
+OPEN_STATUSES = {"live", "active", "upcoming", "open", "ongoing", "starting"}
 CLOSED_STATUSES = {
     "judging", "evaluating", "finished", "closed", "ended", "completed",
-    "review", "mitigation",
+    "review", "mitigation", "submissions closed",
 }
+
+
+def is_open_status(status):
+    if not status:
+        return None
+    s = status.lower()
+    if any(c in s for c in CLOSED_STATUSES):
+        return False
+    if any(o in s for o in OPEN_STATUSES):
+        return True
+    return None
 
 
 def http_get(url, headers=None, timeout=20):
@@ -60,105 +77,30 @@ def get_json(url, headers=None):
         return None
 
 
-NEXT_DATA_RE = re.compile(
-    r'<script id="__NEXT_DATA__" type="application/json"[^>]*>(.*?)</script>',
-    re.DOTALL,
-)
+_BROWSER = None
 
 
-def extract_next_data(html):
-    if not html:
-        return None
-    m = NEXT_DATA_RE.search(html)
-    if not m:
-        return None
+def get_rendered_text(url):
+    """Render `url` with a headless browser and return the visible body
+    text, or None on failure. Reuses one browser instance across calls."""
+    global _BROWSER
     try:
-        return json.loads(m.group(1))
+        if _BROWSER is None:
+            _pw = sync_playwright().start()
+            _BROWSER = _pw.chromium.launch()
+        page = _BROWSER.new_page()
+        page.goto(url, wait_until="networkidle", timeout=45000)
+        page.wait_for_timeout(2500)
+        text = page.inner_text("body")
+        page.close()
+        return text
     except Exception as e:
-        print(f"[warn] __NEXT_DATA__ parse failed: {e}", file=sys.stderr)
+        print(f"[warn] render {url} failed: {e}", file=sys.stderr)
         return None
 
 
-NAME_KEYS = {"title", "name", "projectname", "protocolname", "slug"}
-PRIZE_KEYS = {
-    "prize", "prizepool", "totalprize", "rewardpool", "reward",
-    "totalrewards", "maxrewards", "totalprizepool", "usdprizepool",
-}
-DATE_KEYS = {
-    "enddate", "deadline", "contestend", "endtime", "end", "endsat",
-    "submissionclosedate", "endtimestamp",
-}
-CHAIN_KEYS = {"chain", "blockchain", "chains", "network"}
-STATUS_KEYS = {"status", "state", "phase"}
-
-
-def _lower_keys(d):
-    return {k.lower(): k for k in d.keys()}
-
-
-def find_candidate_listings(node, found=None, depth=0, max_depth=14):
-    """Best-effort recursive walk of an unknown JSON tree (e.g. a Next.js
-    __NEXT_DATA__ payload) to find dict entries that look like contest
-    listing cards, based on key-name heuristics rather than an exact
-    schema (which couldn't be verified against live data here)."""
-    if found is None:
-        found = []
-    if depth > max_depth:
-        return found
-    if isinstance(node, dict):
-        lk = _lower_keys(node)
-        has_name = bool(lk.keys() & NAME_KEYS)
-        has_signal = bool(
-            (lk.keys() & PRIZE_KEYS) or (lk.keys() & DATE_KEYS) or (lk.keys() & STATUS_KEYS)
-        )
-        if has_name and has_signal:
-            found.append(node)
-        for v in node.values():
-            find_candidate_listings(v, found, depth + 1, max_depth)
-    elif isinstance(node, list):
-        for item in node:
-            find_candidate_listings(item, found, depth + 1, max_depth)
-    return found
-
-
-def normalize_listing(raw, platform, base_url=""):
-    if not isinstance(raw, dict):
-        return None
-    lk = _lower_keys(raw)
-
-    def pick(keys):
-        for k in keys:
-            if k in lk:
-                return raw[lk[k]]
-        return None
-
-    name = pick(NAME_KEYS) or "?"
-    prize = pick(PRIZE_KEYS)
-    end = pick(DATE_KEYS)
-    chain = pick(CHAIN_KEYS)
-    status = pick(STATUS_KEYS)
-    slug = pick({"slug", "id", "_id"}) or name
-    return {
-        "platform": platform,
-        "name": str(name)[:120],
-        "prize": prize,
-        "chain": chain if isinstance(chain, str) else (", ".join(chain) if isinstance(chain, list) else chain),
-        "end": end,
-        "status": str(status).lower() if status is not None else None,
-        "id": f"{platform}:{slug}",
-        "url": base_url,
-    }
-
-
-def is_open(listing):
-    status = listing.get("status")
-    if status is None:
-        return None  # unknown — treated as "keep, can't confirm closed"
-    if any(s in status for s in CLOSED_STATUSES):
-        return False
-    if any(s in status for s in OPEN_STATUSES):
-        return True
-    return None
+def lines_of(text):
+    return [l.strip() for l in text.splitlines() if l.strip()]
 
 
 # ---------------------------------------------------------------- sources --
@@ -168,45 +110,52 @@ def scan_cantina():
     data = get_json("https://cantina.xyz/api/v0/opportunities")
     if data is None:
         return [], f"{platform}: fetch/parse failed (down, blocked, or shape changed)"
-    comps = []
     try:
         comps = data.get("groups", {}).get("currentCompetitions", []) or []
     except AttributeError:
         comps = []
-    if not comps:
-        comps = find_candidate_listings(data)
-    listings = [l for l in (normalize_listing(c, platform, "https://cantina.xyz/competitions") for c in comps) if l]
+    listings = []
+    for c in comps:
+        if not isinstance(c, dict):
+            continue
+        name = c.get("title") or c.get("name") or c.get("slug") or "?"
+        listings.append({
+            "platform": platform,
+            "name": str(name)[:120],
+            "prize": c.get("prizePool") or c.get("prize"),
+            "chain": c.get("chain"),
+            "end": c.get("endDate") or c.get("deadline"),
+            "status": str(c.get("status", "")).lower() or "live",  # present in currentCompetitions => open
+            "id": f"{platform}:{c.get('slug') or c.get('id') or name}",
+            "url": "https://cantina.xyz/competitions",
+        })
     return listings, None
-
-
-def scan_next_data_site(url, platform):
-    html = http_get(url)
-    if html is None:
-        return [], f"{platform}: fetch failed (blocked or unreachable) — {url}"
-    data = extract_next_data(html)
-    if data is None:
-        return [], f"{platform}: page returned no usable data (JS-rendered, no __NEXT_DATA__ found) — manual check needed at {url}"
-    candidates = find_candidate_listings(data)
-    if not candidates:
-        return [], f"{platform}: __NEXT_DATA__ found but no listing-shaped entries — manual check needed at {url}"
-    listings = [l for l in (normalize_listing(c, platform, url) for c in candidates) if l]
-    return listings, None
-
-
-def scan_code4rena():
-    return scan_next_data_site("https://code4rena.com/audits", "Code4rena")
 
 
 def scan_sherlock():
-    return scan_next_data_site("https://audits.sherlock.xyz/contests", "Sherlock")
-
-
-def scan_codehawks():
-    return scan_next_data_site("https://codehawks.cyfrin.io", "CodeHawks")
-
-
-def scan_immunefi():
-    return scan_next_data_site("https://immunefi.com/audit-competition/", "Immunefi")
+    platform = "Sherlock"
+    data = get_json("https://audits.sherlock.xyz/api/contests?order_by_date=false&page=1&per_page=50")
+    if not data or "items" not in data:
+        return [], f"{platform}: fetch/parse failed (down, blocked, or shape changed)"
+    listings = []
+    for c in data.get("items", []):
+        status = str(c.get("status", "")).lower()
+        prize = c.get("prize_pool")
+        token = c.get("token")
+        prize_s = f"${prize:,}" + (f" {token}" if token else "") if isinstance(prize, (int, float)) else None
+        ends_at = c.get("ends_at")
+        end_s = datetime.fromtimestamp(ends_at, tz=timezone.utc).strftime("%Y-%m-%d") if ends_at else None
+        listings.append({
+            "platform": platform,
+            "name": str(c.get("title", "?"))[:120],
+            "prize": prize_s,
+            "chain": None,
+            "end": end_s,
+            "status": status,
+            "id": f"{platform}:{c.get('id')}",
+            "url": f"https://audits.sherlock.xyz/contests/{c.get('id')}",
+        })
+    return listings, None
 
 
 def scan_defillama(min_tvl=1_000_000):
@@ -232,6 +181,163 @@ def scan_defillama(min_tvl=1_000_000):
         except Exception:
             continue
     return protocols, None
+
+
+# --- Playwright-rendered, text-parsed sources --------------------------
+
+def scan_immunefi():
+    platform = "Immunefi"
+    url = "https://immunefi.com/audit-competition/"
+    text = get_rendered_text(url)
+    if text is None:
+        return [], f"{platform}: render failed — {url}"
+    ln = lines_of(text)
+    listings = []
+    i = 0
+    while i < len(ln):
+        if ln[i].startswith("$") and i + 2 < len(ln) and ln[i + 1].lower() == "reward pool":
+            prize = ln[i]
+            status = ln[i + 2]
+            # name is 1-2 lines before the prize (skip "Triaged by Immunefi")
+            name = None
+            for back in (1, 2, 3):
+                j = i - back
+                if j < 0:
+                    break
+                cand = ln[j]
+                if cand.lower() in ("triaged by immunefi",) or cand.startswith("$"):
+                    continue
+                name = cand
+                break
+            if name:
+                listings.append({
+                    "platform": platform,
+                    "name": name[:120],
+                    "prize": prize,
+                    "chain": None,
+                    "end": ln[i + 3] if i + 3 < len(ln) else None,
+                    "status": status.lower(),
+                    "id": f"{platform}:{name}",
+                    "url": url,
+                })
+            i += 3
+        else:
+            i += 1
+    if not listings:
+        return [], f"{platform}: rendered OK but no listing-shaped entries found — needs a parser re-tune, check {url}"
+    return listings, None
+
+
+CODE4RENA_TYPE_LABELS = {"audit", "mitigation review", "bug bounty", "analysis"}
+CODE4RENA_STATUS_WORDS = {
+    "submissions closed", "completed", "live", "upcoming", "judging",
+    "report in progress",
+}
+DATE_RANGE_RE = re.compile(r"^\d{1,2}\s+[A-Za-z]{3}.*\d{1,2}:\d{2}\s*(AM|PM)?\s*-\s*\d{1,2}\s+[A-Za-z]{3}")
+PRIZE_RE = re.compile(r"^\$[\d,]+")
+
+
+def scan_code4rena():
+    platform = "Code4rena"
+    url = "https://code4rena.com/audits"
+    text = get_rendered_text(url)
+    if text is None:
+        return [], f"{platform}: render failed — {url}"
+    ln = lines_of(text)
+    listings = []
+    for i, line in enumerate(ln):
+        if line.lower() not in CODE4RENA_TYPE_LABELS:
+            continue
+        name = ln[i + 1] if i + 1 < len(ln) else None
+        if not name:
+            continue
+        # status: nearest preceding recognized status word (within 3 lines)
+        status = None
+        for back in (1, 2, 3):
+            j = i - back
+            if j < 0:
+                break
+            if ln[j].lower() in CODE4RENA_STATUS_WORDS:
+                status = ln[j].lower()
+                break
+        # prize/date: search forward up to ~12 lines
+        prize = end = None
+        for fwd in range(2, 13):
+            j = i + fwd
+            if j >= len(ln):
+                break
+            if end is None and DATE_RANGE_RE.match(ln[j]):
+                end = ln[j]
+            elif prize is None and PRIZE_RE.match(ln[j]):
+                prize = ln[j]
+            if prize and end:
+                break
+        listings.append({
+            "platform": platform,
+            "name": name[:120],
+            "prize": prize,
+            "chain": None,
+            "end": end,
+            "status": status,
+            "id": f"{platform}:{name}",
+            "url": url,
+        })
+    if not listings:
+        return [], f"{platform}: rendered OK but no listing-shaped entries found — needs a parser re-tune, check {url}"
+    return listings, None
+
+
+CODEHAWKS_STATUS_WORDS = {"live", "upcoming", "judging", "ended"}
+CODEHAWKS_END_MARKER = "quick actions"
+
+
+def scan_codehawks():
+    platform = "CodeHawks"
+    url = "https://codehawks.cyfrin.io"
+    text = get_rendered_text(url)
+    if text is None:
+        return [], f"{platform}: render failed — {url}"
+    ln = lines_of(text)
+    listings = []
+    for i, line in enumerate(ln):
+        if line.lower() != CODEHAWKS_END_MARKER:
+            continue
+        # walk backward from this marker to reconstruct one card's fields
+        j = i - 1
+        status = None
+        # skip an "Ended Xd, Xh ago" line if present
+        if j >= 0 and ln[j].lower().startswith("ended") and ln[j].lower() != "ended":
+            j -= 1
+        if j >= 0 and ln[j].lower() in CODEHAWKS_STATUS_WORDS:
+            status = ln[j].lower()
+            j -= 1
+        currency = ln[j] if j >= 0 and re.match(r"^[A-Z]{2,6}$", ln[j] or "") else None
+        if currency:
+            j -= 1
+        prize = ln[j] if j >= 0 and re.match(r"^[\d,]+(\.\d+)?$", ln[j] or "") else None
+        if prize:
+            j -= 1
+        # skip visibility tag
+        if j >= 0 and ln[j] in ("Public", "Private", "Invite-only"):
+            j -= 1
+        name = ln[j] if j >= 0 else None
+        if not name or name.lower() == "kyc rewards":
+            if j - 1 >= 0:
+                name = ln[j - 1]
+        if name:
+            listings.append({
+                "platform": platform,
+                "name": name[:120],
+                "prize": f"{prize} {currency}" if prize and currency else prize,
+                "chain": None,
+                "end": None,
+                "status": status,
+                "id": f"{platform}:{name}",
+                "url": url,
+            })
+    if not listings:
+        return [], f"{platform}: rendered OK but no listing-shaped entries found — needs a parser re-tune, check {url}"
+    return listings, None
 
 
 # ------------------------------------------------------------------ state --
@@ -323,13 +429,19 @@ def main():
             errors.append(err)
         all_contests.extend(listings)
 
+    if _BROWSER is not None:
+        try:
+            _BROWSER.close()
+        except Exception:
+            pass
+
     protocols, perr = scan_defillama()
     if perr:
         errors.append(perr)
 
-    # keep contests that are confirmed open, or whose status we couldn't
-    # determine (better to surface a maybe than silently drop it)
-    open_contests = [c for c in all_contests if is_open(c) is not False]
+    # keep contests confirmed open, or whose status couldn't be determined
+    # (better to surface a maybe than silently drop it)
+    open_contests = [c for c in all_contests if is_open_status(c.get("status")) is not False]
 
     bootstrapped = state.get("bootstrapped", False)
 
