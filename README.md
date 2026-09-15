@@ -1,13 +1,15 @@
 # Audit & Bounty Monitor
 
 Scans Immunefi, Code4rena, Sherlock, Cantina and CodeHawks for open audit
-contests, and DefiLlama for newly-listed DeFi protocols with >= $1M TVL.
-Each newly-detected protocol is also automatically checked against
-Immunefi's bug-bounty list (verified reliable — see below); the alert
-says explicitly whether one was found rather than just flagging TVL and
-leaving the check entirely manual. Posts to a Telegram group: an
-immediate alert the moment something new shows up, plus a consolidated
-status update every 4 hours.
+contests, DefiLlama for newly-listed DeFi protocols with >= $1M TVL, and
+HackerOne + HackenProof for newly-*launched* ongoing bug bounty programs
+(separate from the time-boxed contests above — see "Newest bounty
+programs" below). Each newly-detected protocol is also automatically
+checked against Immunefi's bug-bounty list (verified reliable — see
+below); the alert says explicitly whether one was found rather than just
+flagging TVL and leaving the check entirely manual. Posts to a Telegram
+group: an immediate alert the moment something new shows up, plus a
+consolidated status update every 4 hours.
 
 **Links**: every open contest alert includes a real, contest-specific URL
 (not just the platform's generic listing page — see "Real contest links"
@@ -82,6 +84,37 @@ bounty is a separate question, checked against:
   `/bug-bounties` page renders individual program links but no bulk
   listing or API was found. Both just get a manual-check link in the
   alert.
+
+## Newest bounty programs
+
+Tracked separately from the "new protocol has a bounty?" cross-check
+above — this scans bounty platforms directly for recently *launched*
+programs, catching them even if the underlying protocol never shows up
+on DefiLlama (or is below the $1M TVL floor):
+
+- **HackerOne — automated, reliable.** `scan_hackerone_newest()` POSTs
+  directly to `hackerone.com/graphql` (`DiscoveryQuery`, no auth or
+  browser needed — confirmed via `diagnose.py`), sorted by real
+  `launched_at DESC`. This is the cleanest source in the whole repo.
+- **HackenProof — automated, best-effort.** No API exists, but
+  `hackenproof.com/programs`'s default (unsorted) order already puts the
+  most recently started programs first — confirmed live: consecutive
+  `Started date:` values were strictly descending. Reuses the same
+  status-word-anchored text parser proven on Code4rena. No clean
+  per-program URL was found, so its alerts link to the listing page, not
+  the specific program.
+- **Immunefi, Cantina, Sherlock — not included here.** Immunefi's bounty
+  list has no visible launch-date field to sort by (only "last updated");
+  it's still covered by the reactive per-protocol check above. Cantina
+  and Sherlock have the same automation gaps described under "Bug-bounty
+  cross-check".
+
+Tracked with its own `seen_bounty_programs` / `bounty_programs_bootstrapped`
+state (deliberately separate from the contests/protocols `bootstrapped`
+flag — reusing that one caused a real bug: this feature's first-ever run
+saw an already-`True` flag from older history and blasted all 25
+pre-existing programs as "new" in one alert. Fixed by giving it an
+independent bootstrap flag.).
 
 ## Known limitation
 

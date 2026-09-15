@@ -119,41 +119,11 @@ def fetch_post_json(url, body_obj, headers=None):
         return {"error": str(e)}
 
 
-HACKERONE_DISCOVERY_QUERY = """query DiscoveryQuery($query: OpportunitiesQuery!, $filter: QueryInput!, $from: Int, $size: Int, $sort: [SortInput!], $post_filters: OpportunitiesFilterInput) {
-  me { id __typename }
-  opportunities_search(query: $query, filter: $filter, from: $from, size: $size, sort: $sort, post_filters: $post_filters) {
-    nodes {
-      ... on OpportunityDocument {
-        id handle state name launched_at offers_bounties last_updated_at
-        currency team_type minimum_bounty_table_value maximum_bounty_table_value
-        submission_state
-      }
-      __typename
-    }
-    total_count
-    __typename
-  }
-}"""
-
-POST_API_TARGETS = {
-    "hackerone_discovery_direct": {
-        "url": "https://hackerone.com/graphql",
-        "body": {
-            "operationName": "DiscoveryQuery",
-            "variables": {
-                "size": 10, "from": 0, "query": {},
-                "filter": {"bool": {"filter": [{"bool": {
-                    "must_not": {"term": {"team_type": "Engagements::Assessment"}},
-                    "should": [{"term": {"offers_bounties": True}}],
-                }}, None]}},
-                "sort": [{"field": "launched_at", "direction": "DESC"}],
-                "post_filters": {"my_programs": False, "bookmarked": False, "campaign_teams": False},
-                "product_area": "opportunity_discovery", "product_feature": "search",
-            },
-            "query": HACKERONE_DISCOVERY_QUERY,
-        },
-    },
-}
+# POST_API_TARGETS: {name: {url, body, headers?}} — like API_TARGETS but
+# for a JSON POST (e.g. a GraphQL query). Verified this way for
+# scan_hackerone_newest() (now shipped in scan.py directly) before
+# trusting it in production.
+POST_API_TARGETS = {}
 
 
 def fetch_api(url):
@@ -265,7 +235,10 @@ async def main():
     print("[diagnose] wrote diagnose-output.json")
 
 
-SCANNER_TEST = True
+# Verified 2026-09-15: scan_hackerone_newest and scan_hackenproof_newest
+# both returned real data. Flip back to True to re-verify after changing
+# either function.
+SCANNER_TEST = False
 
 if __name__ == "__main__":
     # Anything using scan.py's sync Playwright API must run outside the
