@@ -21,10 +21,15 @@ API_TARGETS = {
 # query params don't filter — confirmed via prior diagnostic run) and see
 # if the result list actually narrows.
 SEARCH_TESTS = {
-    "hackenproof_interactive_v2": {
-        "url": "https://hackenproof.com/programs",
-        "placeholder": "Search by ID or name",
-        "query": "Cetus",
+    "immunefi_negative_test": {
+        "url": "https://immunefi.com/bug-bounty/",
+        "input_selector": "input[type='search'], input[placeholder*='earch' i]",
+        "query": "Zzzznonexistentprotocolxyz123",
+    },
+    "immunefi_positive_test2": {
+        "url": "https://immunefi.com/bug-bounty/",
+        "input_selector": "input[type='search'], input[placeholder*='earch' i]",
+        "query": "Cosmos",
     },
 }
 
@@ -35,11 +40,10 @@ async def search_test_v2(browser, name, cfg):
     try:
         await page.goto(cfg["url"], wait_until="networkidle", timeout=45000)
         await page.wait_for_timeout(1500)
-        locator = page.get_by_placeholder(cfg["placeholder"])
+        locator = page.locator(cfg["input_selector"]).first
         await locator.click()
         await locator.fill(cfg["query"])
-        await locator.press("Enter")
-        await page.wait_for_timeout(4000)
+        await page.wait_for_timeout(2500)
         result["text_after_search"] = await page.inner_text("body")
     except Exception as e:
         result["error"] = str(e)
