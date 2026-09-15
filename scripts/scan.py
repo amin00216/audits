@@ -454,6 +454,14 @@ def main():
         new_protocols = []
         state["bootstrapped"] = True
 
+    # Accumulate new protocols across runs so the once-daily digest can
+    # show what's genuinely new *today*, not just "biggest by TVL" (DefiLlama's
+    # API has no reliable listing-date field, so real "new" only exists via
+    # this run-to-run diff).
+    pending = {p["id"]: p for p in state.get("pending_new_protocols", [])}
+    for p in new_protocols:
+        pending[p["id"]] = p
+
     if new_contests or new_protocols:
         lines = ["\U0001F195 <b>New audit activity detected</b>"]
         for c in new_contests:
@@ -474,10 +482,13 @@ def main():
         else:
             lines.append("none found")
         lines.append("")
-        top_protocols = sorted(protocols, key=lambda x: -(x.get("tvl") or 0))[:5]
-        lines.append(f"<u>Newest protocols ≥$1M TVL (top 5 of {len(protocols)} tracked)</u>")
-        for p in top_protocols:
-            lines.append("• " + fmt_protocol(p))
+        todays_new = sorted(pending.values(), key=lambda x: -(x.get("tvl") or 0))
+        lines.append(f"<u>New protocols today ≥$1M TVL ({len(todays_new)})</u>")
+        if todays_new:
+            for p in todays_new[:10]:
+                lines.append("• " + fmt_protocol(p))
+        else:
+            lines.append(f"none — {len(protocols)} total tracked, unchanged")
         if errors:
             lines.append("")
             lines.append("<u>Sources that failed to parse</u>")
@@ -485,6 +496,9 @@ def main():
                 lines.append("• " + e)
         send_telegram("\n".join(lines))
         state["last_digest_date"] = today
+        pending = {}  # reset accumulator after reporting
+
+    state["pending_new_protocols"] = list(pending.values())
 
     state["seen_contests"] = sorted(seen_contests | {c["id"] for c in open_contests})
     state["seen_protocols"] = sorted(seen_protocols | {p["id"] for p in protocols})
