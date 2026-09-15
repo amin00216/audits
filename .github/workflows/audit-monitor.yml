@@ -1,0 +1,45 @@
+name: Audit & Bounty Monitor
+
+on:
+  schedule:
+    # Near-real-time new-contest/new-protocol check. The script itself
+    # decides once per UTC day (after DIGEST_HOUR_UTC) to also send the
+    # consolidated daily digest, so one schedule covers both jobs.
+    - cron: "*/30 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: audit-monitor
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run monitor
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          DIGEST_HOUR_UTC: "8"
+        run: python scripts/scan.py
+
+      - name: Commit updated state
+        run: |
+          git config user.name "audit-monitor-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add state.json
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: update monitor state"
+            git push
+          else
+            echo "No state changes."
+          fi
