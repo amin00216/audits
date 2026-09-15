@@ -20,17 +20,30 @@ API_TARGETS = {
 # Interactive search tests: type into each platform's real search box (URL
 # query params don't filter — confirmed via prior diagnostic run) and see
 # if the result list actually narrows.
-SEARCH_TESTS = {
-    "immunefi_interactive_lombard": {
-        "url": "https://immunefi.com/bug-bounty/",
-        "input_selector": "input[type='search'], input[placeholder*='earch' i]",
-        "query": "Lombard",
-    },
-    "hackenproof_interactive_cetus": {
-        "url": "https://hackenproof.com/programs",
-        "input_selector": "input[type='search'], input[placeholder*='earch' i]",
-        "query": "Cetus",
-    },
+SEARCH_TESTS = {}
+
+
+async def inspect_inputs(browser, name, url):
+    """List every <input> on the page with its attributes and index, so the
+    right one can be picked for the interactive search test (generic
+    type/placeholder matching picked the wrong element last time)."""
+    page = await browser.new_page()
+    result = {}
+    try:
+        await page.goto(url, wait_until="networkidle", timeout=45000)
+        await page.wait_for_timeout(1500)
+        result["inputs"] = await page.locator("input").evaluate_all(
+            "els => els.map((e,i) => ({i, type: e.type, placeholder: e.placeholder, "
+            "name: e.name, id: e.id, ariaLabel: e.getAttribute('aria-label'), visible: e.offsetParent !== null}))"
+        )
+    except Exception as e:
+        result["error"] = str(e)
+    await page.close()
+    return result
+
+
+INSPECT_TARGETS = {
+    "hackenproof_inputs": "https://hackenproof.com/programs",
 }
 
 
@@ -107,7 +120,7 @@ async def main():
         print(f"[diagnose] fetching {name} ({url})")
         results[name] = fetch_api(url)
 
-    if TARGETS or SEARCH_TESTS:
+    if TARGETS or SEARCH_TESTS or INSPECT_TARGETS:
         async with async_playwright() as p:
             browser = await p.chromium.launch()
             for name, url in TARGETS.items():
@@ -116,6 +129,9 @@ async def main():
             for name, cfg in SEARCH_TESTS.items():
                 print(f"[diagnose] search test {name} ({cfg['url']} -> '{cfg['query']}')")
                 results[name] = await search_test(browser, name, cfg)
+            for name, url in INSPECT_TARGETS.items():
+                print(f"[diagnose] inspecting inputs on {name} ({url})")
+                results[name] = await inspect_inputs(browser, name, url)
             await browser.close()
 
     with open("diagnose-output.json", "w") as f:
