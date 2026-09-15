@@ -1,0 +1,33 @@
+name: Diagnose scrape targets
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/diagnose.yml"
+      - "scripts/diagnose.py"
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Playwright
+        run: |
+          pip install playwright
+          playwright install --with-deps chromium
+      - name: Run diagnostic
+        run: python scripts/diagnose.py 2>&1 | tee diagnose.log
+      - name: Commit results
+        run: |
+          git config user.name "audit-monitor-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add diagnose-output.json diagnose.log
+          git commit -m "chore: diagnostic scrape output" || echo "nothing to commit"
+          git push
