@@ -1,3 +1,3 @@
-[diagnose] visiting code4rena (https://code4rena.com/audits)
-[diagnose] visiting codehawks (https://codehawks.cyfrin.io)
+[diagnose] fetching immunefi_api (https://immunefi.com/public-api/bounties/assets/dice/?type=audit-competitions)
+[diagnose] fetching sherlock_api (https://audits.sherlock.xyz/api/contests?order_by_date=false&page=1&per_page=20)
 [diagnose] wrote diagnose-output.json
