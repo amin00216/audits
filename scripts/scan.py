@@ -103,6 +103,40 @@ def lines_of(text):
     return [l.strip() for l in text.splitlines() if l.strip()]
 
 
+IMMUNEFI_SEARCH_SELECTOR = "input[type='search'], input[placeholder*='earch' i]"
+
+
+def check_immunefi_bounty(protocol_name):
+    """Search immunefi.com/bug-bounty/ for `protocol_name` using the site's
+    real search box (URL query params don't filter it — confirmed via
+    diagnose.py). Returns True (found), False (confirmed not found), or
+    None (couldn't check — treat as unknown, not as "not found")."""
+    global _BROWSER
+    try:
+        if _BROWSER is None:
+            _pw = sync_playwright().start()
+            _BROWSER = _pw.chromium.launch()
+        page = _BROWSER.new_page()
+        page.goto("https://immunefi.com/bug-bounty/", wait_until="networkidle", timeout=45000)
+        page.wait_for_timeout(1500)
+        box = page.locator(IMMUNEFI_SEARCH_SELECTOR).first
+        if box.count() == 0:
+            page.close()
+            return None
+        box.click()
+        box.fill(protocol_name)
+        page.wait_for_timeout(2500)
+        text = page.inner_text("body")
+        page.close()
+        m = re.search(r"View (\d+) Bounties", text)
+        if not m:
+            return None
+        return int(m.group(1)) > 0
+    except Exception as e:
+        print(f"[warn] Immunefi bounty check for {protocol_name!r} failed: {e}", file=sys.stderr)
+        return None
+
+
 # ---------------------------------------------------------------- sources --
 
 def scan_cantina():
@@ -407,10 +441,24 @@ def fmt_contest(c):
     return " — ".join(bits)
 
 
-def fmt_protocol(p):
+def fmt_protocol(p, with_bounty_check=False):
     tvl = p.get("tvl")
     tvl_s = f"${tvl/1e6:.1f}M" if tvl else "?"
-    return f"<b>{p['name']}</b> — {p.get('category','?')} — {tvl_s} TVL — {p.get('chain','?')}"
+    line = f"<b>{p['name']}</b> — {p.get('category','?')} — {tvl_s} TVL — {p.get('chain','?')}"
+    if p.get("url"):
+        line += f"\n   {p['url']}"
+    if with_bounty_check:
+        verdict = p.get("immunefi_bounty")
+        if verdict is True:
+            line += "\n   ✅ has an Immunefi bounty"
+        elif verdict is False:
+            line += (f"\n   ⚠️ no Immunefi bounty found — check manually: "
+                     f"HackenProof (https://hackenproof.com/programs), "
+                     f"Cantina (https://cantina.xyz/bounties), "
+                     f"Sherlock (https://audits.sherlock.xyz/bug-bounties)")
+        else:
+            line += "\n   ❓ couldn't check Immunefi (site error) — verify manually"
+    return line
 
 
 # ------------------------------------------------------------------- main --
@@ -428,12 +476,6 @@ def main():
         if err:
             errors.append(err)
         all_contests.extend(listings)
-
-    if _BROWSER is not None:
-        try:
-            _BROWSER.close()
-        except Exception:
-            pass
 
     protocols, perr = scan_defillama()
     if perr:
@@ -453,6 +495,20 @@ def main():
         new_contests = []
         new_protocols = []
         state["bootstrapped"] = True
+    else:
+        # Only worth the extra page-loads when there's something to check.
+        # Verified accurate against known positive/negative cases — see
+        # diagnose.py history — but the site could still change layout,
+        # so a None (couldn't check) is reported as unknown, never as
+        # "no bounty found".
+        for p in new_protocols:
+            p["immunefi_bounty"] = check_immunefi_bounty(p["name"])
+
+    if _BROWSER is not None:
+        try:
+            _BROWSER.close()
+        except Exception:
+            pass
 
     # Accumulate new protocols across runs so the once-daily digest can
     # show what's genuinely new *today*, not just "biggest by TVL" (DefiLlama's
@@ -467,7 +523,7 @@ def main():
         for c in new_contests:
             lines.append("• " + fmt_contest(c))
         for p in new_protocols:
-            lines.append("• \U0001F9EA " + fmt_protocol(p) + " (check for a bug bounty)")
+            lines.append("• \U0001F9EA " + fmt_protocol(p, with_bounty_check=True))
         send_telegram("\n".join(lines))
 
     now = datetime.now(timezone.utc)
@@ -493,7 +549,7 @@ def main():
         lines.append(f"<u>New protocols since last update ≥$1M TVL ({len(recent_new)})</u>")
         if recent_new:
             for p in recent_new[:10]:
-                lines.append("• " + fmt_protocol(p))
+                lines.append("• " + fmt_protocol(p, with_bounty_check=True))
         else:
             lines.append(f"none — {len(protocols)} total tracked, unchanged")
         if errors:
