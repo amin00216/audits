@@ -203,6 +203,19 @@ async def search_test(browser, name, cfg):
     return result
 
 
+def run_scanner_test():
+    import os
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import scan
+    out = {}
+    for fn in (scan.scan_hackerone_newest, scan.scan_hackenproof_newest):
+        listings, err = fn()
+        out[fn.__name__] = {"error": err, "count": len(listings), "sample": listings[:8]}
+    if scan._BROWSER:
+        scan._BROWSER.close()
+    return out
+
+
 def run_link_match_test():
     import os
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -252,15 +265,22 @@ async def main():
     print("[diagnose] wrote diagnose-output.json")
 
 
+SCANNER_TEST = True
+
 if __name__ == "__main__":
+    # Anything using scan.py's sync Playwright API must run outside the
+    # asyncio event loop main() uses below, or Playwright's sync API
+    # raises ("Sync API inside asyncio loop").
+    sync_results = {}
     if LINK_MATCH_TEST:
-        # Uses scan.py's sync Playwright API — must run outside the
-        # asyncio event loop the rest of this file uses, or Playwright's
-        # sync API raises ("Sync API inside asyncio loop").
         print("[diagnose] running link-match test against scan.py's real functions")
-        link_match_result = run_link_match_test()
+        sync_results["link_match_test"] = run_link_match_test()
+    if SCANNER_TEST:
+        print("[diagnose] running scanner test against scan.py's real functions")
+        sync_results["scanner_test"] = run_scanner_test()
+    if sync_results:
         with open("diagnose-output.json", "w") as f:
-            json.dump({"link_match_test": link_match_result}, f, indent=2)
-        print("[diagnose] wrote diagnose-output.json (link_match_test only)")
+            json.dump(sync_results, f, indent=2)
+        print("[diagnose] wrote diagnose-output.json (sync tests only)")
     else:
         asyncio.run(main())

@@ -77,6 +77,20 @@ def get_json(url, headers=None):
         return None
 
 
+def post_json(url, body_obj, headers=None, timeout=20):
+    data = json.dumps(body_obj).encode()
+    req = urllib.request.Request(url, data=data, method="POST", headers={
+        "User-Agent": UA, "Content-Type": "application/json",
+        "Accept": "application/json", **(headers or {}),
+    })
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return json.loads(resp.read().decode("utf-8", errors="replace"))
+    except Exception as e:
+        print(f"[warn] POST {url} failed: {e}", file=sys.stderr)
+        return None
+
+
 _BROWSER = None
 
 
@@ -272,6 +286,123 @@ def scan_defillama(min_tvl=1_000_000):
     return protocols, None
 
 
+# --- Newest ongoing bug-bounty *programs* (not time-boxed contests) ----
+# Separate concern from the audit-contest scanning above: these are
+# standing bounty programs, tracked here specifically to catch newly
+# *launched* ones as soon as they appear, independent of whether a
+# matching DeFi protocol ever shows up on DefiLlama.
+
+HACKERONE_DISCOVERY_QUERY = """query DiscoveryQuery($query: OpportunitiesQuery!, $filter: QueryInput!, $from: Int, $size: Int, $sort: [SortInput!], $post_filters: OpportunitiesFilterInput) {
+  me { id __typename }
+  opportunities_search(query: $query, filter: $filter, from: $from, size: $size, sort: $sort, post_filters: $post_filters) {
+    nodes {
+      ... on OpportunityDocument {
+        id handle state name launched_at offers_bounties last_updated_at
+        currency team_type minimum_bounty_table_value maximum_bounty_table_value
+        submission_state
+      }
+      __typename
+    }
+    total_count
+    __typename
+  }
+}"""
+
+
+def scan_hackerone_newest(size=15):
+    """HackerOne's public opportunities_search GraphQL query, sorted by
+    launched_at DESC — a real, documented-by-observation, no-auth-needed
+    API (verified via diagnose.py: works as a plain POST, no browser or
+    CSRF token required)."""
+    platform = "HackerOne"
+    body = {
+        "operationName": "DiscoveryQuery",
+        "variables": {
+            "size": size, "from": 0, "query": {},
+            "filter": {"bool": {"filter": [{"bool": {
+                "must_not": {"term": {"team_type": "Engagements::Assessment"}},
+                "should": [{"term": {"offers_bounties": True}}],
+            }}, None]}},
+            "sort": [{"field": "launched_at", "direction": "DESC"}],
+            "post_filters": {"my_programs": False, "bookmarked": False, "campaign_teams": False},
+            "product_area": "opportunity_discovery", "product_feature": "search",
+        },
+        "query": HACKERONE_DISCOVERY_QUERY,
+    }
+    data = post_json("https://hackerone.com/graphql", body)
+    if not data:
+        return [], f"{platform}: fetch/parse failed"
+    try:
+        nodes = data["data"]["opportunities_search"]["nodes"]
+    except (KeyError, TypeError):
+        return [], f"{platform}: unexpected response shape"
+    programs = []
+    for n in nodes:
+        handle = n.get("handle")
+        min_b, max_b = n.get("minimum_bounty_table_value"), n.get("maximum_bounty_table_value")
+        currency = (n.get("currency") or "usd").upper()
+        prize = f"{min_b:,}-{max_b:,} {currency}" if min_b is not None and max_b is not None else None
+        programs.append({
+            "platform": platform,
+            "name": n.get("name") or handle,
+            "prize": prize,
+            "launched_at": n.get("launched_at"),
+            "status": (n.get("submission_state") or "").lower(),
+            "id": f"{platform}:{handle}",
+            "url": f"https://hackerone.com/{handle}" if handle else None,
+        })
+    return programs, None
+
+
+HACKENPROOF_STATUS_WORDS = {"live", "paused", "ended", "closed"}
+HACKENPROOF_STARTED_RE = re.compile(r"^Started date:\s*(.+)$", re.IGNORECASE)
+
+
+def scan_hackenproof_newest():
+    """hackenproof.com/programs has no discrete listing API (confirmed via
+    diagnose.py) but its default (unsorted) order already puts the most
+    recently started programs first — verified against live text output,
+    where consecutive "Started date:" values were strictly descending."""
+    platform = "HackenProof"
+    url = "https://hackenproof.com/programs"
+    text = get_rendered_text(url)
+    if text is None:
+        return [], f"{platform}: render failed — {url}"
+    ln = lines_of(text)
+    programs = []
+    for i, line in enumerate(ln):
+        if line.lower() not in HACKENPROOF_STATUS_WORDS:
+            continue
+        name = ln[i + 1] if i + 1 < len(ln) else None
+        if not name:
+            continue
+        started = prize = None
+        for fwd in range(2, 30):
+            j = i + fwd
+            if j >= len(ln):
+                break
+            m = HACKENPROOF_STARTED_RE.match(ln[j])
+            if m:
+                started = m.group(1).strip()
+            elif started is not None and PRIZE_RE.match(ln[j]):
+                prize = ln[j]
+                break
+        if started is None:
+            continue  # not a real card (e.g. matched a stray status word)
+        programs.append({
+            "platform": platform,
+            "name": name[:120],
+            "prize": f"up to {prize}" if prize else None,
+            "launched_at": started,
+            "status": line.lower(),
+            "id": f"{platform}:{name}",
+            "url": url,  # no clean per-card link found — see README
+        })
+    if not programs:
+        return [], f"{platform}: rendered OK but no listing-shaped entries found — needs a parser re-tune, check {url}"
+    return programs, None
+
+
 # --- Playwright-rendered, text-parsed sources --------------------------
 
 def scan_immunefi():
@@ -441,7 +572,10 @@ def load_state():
                 return json.load(f)
         except Exception:
             pass
-    return {"seen_contests": [], "seen_protocols": [], "last_digest_at": None, "bootstrapped": False}
+    return {
+        "seen_contests": [], "seen_protocols": [], "seen_bounty_programs": [],
+        "last_digest_at": None, "bootstrapped": False,
+    }
 
 
 def save_state(state):
@@ -525,6 +659,18 @@ def fmt_protocol(p, with_bounty_check=False):
     return line
 
 
+def fmt_bounty_program(b):
+    bits = [f"<b>{b['name']}</b> ({b['platform']})"]
+    if b.get("prize"):
+        bits.append(f"\U0001F4B0 {b['prize']}")
+    if b.get("launched_at"):
+        bits.append(f"\U0001F680 launched {b['launched_at']}")
+    line = " — ".join(bits)
+    if b.get("url"):
+        line += f"\n   {b['url']}"
+    return line
+
+
 # ------------------------------------------------------------------- main --
 
 def main():
@@ -532,6 +678,7 @@ def main():
     state = load_state()
     seen_contests = set(state.get("seen_contests", []))
     seen_protocols = set(state.get("seen_protocols", []))
+    seen_bounty_programs = set(state.get("seen_bounty_programs", []))
 
     all_contests = []
     errors = []
@@ -545,6 +692,13 @@ def main():
     if perr:
         errors.append(perr)
 
+    bounty_programs = []
+    for scan_fn in (scan_hackerone_newest, scan_hackenproof_newest):
+        listings, err = scan_fn()
+        if err:
+            errors.append(err)
+        bounty_programs.extend(listings)
+
     # keep contests confirmed open, or whose status couldn't be determined
     # (better to surface a maybe than silently drop it)
     open_contests = [c for c in all_contests if is_open_status(c.get("status")) is not False]
@@ -553,11 +707,13 @@ def main():
 
     new_contests = [c for c in open_contests if c["id"] not in seen_contests]
     new_protocols = [p for p in protocols if p["id"] not in seen_protocols]
+    new_bounty_programs = [b for b in bounty_programs if b["id"] not in seen_bounty_programs]
 
     if not bootstrapped:
         print("[info] First run — bootstrapping state without alerting.")
         new_contests = []
         new_protocols = []
+        new_bounty_programs = []
         state["bootstrapped"] = True
     else:
         # Only worth the extra page-loads when there's something to check.
@@ -584,12 +740,18 @@ def main():
     for p in new_protocols:
         pending[p["id"]] = p
 
-    if new_contests or new_protocols:
+    pending_bounties = {b["id"]: b for b in state.get("pending_new_bounty_programs", [])}
+    for b in new_bounty_programs:
+        pending_bounties[b["id"]] = b
+
+    if new_contests or new_protocols or new_bounty_programs:
         lines = ["\U0001F195 <b>New audit activity detected</b>"]
         for c in new_contests:
             lines.append("• " + fmt_contest(c))
         for p in new_protocols:
             lines.append("• \U0001F9EA " + fmt_protocol(p, with_bounty_check=True))
+        for b in new_bounty_programs:
+            lines.append("• \U0001F4B0 " + fmt_bounty_program(b))
         send_telegram("\n".join(lines))
 
     now = datetime.now(timezone.utc)
@@ -620,6 +782,20 @@ def main():
                 lines.append("• " + fmt_protocol(p, with_bounty_check=True))
         else:
             lines.append(f"none — {len(protocols)} total tracked, unchanged")
+        lines.append("")
+        recent_bounties = sorted(
+            pending_bounties.values(),
+            key=lambda x: x.get("launched_at") or "", reverse=True,
+        )
+        top5_bounties = recent_bounties[:5]
+        lines.append(
+            f"<u>Newest bounty programs since last update — top {len(top5_bounties)} of {len(recent_bounties)}</u>"
+        )
+        if recent_bounties:
+            for b in top5_bounties:
+                lines.append("• " + fmt_bounty_program(b))
+        else:
+            lines.append(f"none — {len(bounty_programs)} tracked this run, unchanged")
         if errors:
             lines.append("")
             lines.append("<u>Sources that failed to parse</u>")
@@ -628,11 +804,14 @@ def main():
         send_telegram("\n".join(lines))
         state["last_digest_at"] = now.isoformat()
         pending = {}  # reset accumulator after reporting
+        pending_bounties = {}
 
     state["pending_new_protocols"] = list(pending.values())
+    state["pending_new_bounty_programs"] = list(pending_bounties.values())
 
     state["seen_contests"] = sorted(seen_contests | {c["id"] for c in open_contests})
     state["seen_protocols"] = sorted(seen_protocols | {p["id"] for p in protocols})
+    state["seen_bounty_programs"] = sorted(seen_bounty_programs | {b["id"] for b in bounty_programs})
     save_state(state)
 
     if errors:
