@@ -5,7 +5,7 @@ Audit-contest + new-protocol monitor.
 Scans Immunefi, Code4rena, Sherlock, Cantina and CodeHawks for open audit
 contests, and DefiLlama for newly-listed DeFi protocols >= $1M TVL.
 Sends a Telegram alert immediately for anything new since the last run,
-and a consolidated daily digest once per UTC day (after DIGEST_HOUR_UTC).
+and a consolidated status digest every DIGEST_INTERVAL_HOURS (default 4).
 
 State (state.json, committed back to the repo by the workflow) is what
 makes "new" detection possible across runs.
@@ -35,7 +35,7 @@ from playwright.sync_api import sync_playwright
 STATE_PATH = os.path.join(os.path.dirname(__file__), "..", "state.json")
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
-DIGEST_HOUR_UTC = int(os.environ.get("DIGEST_HOUR_UTC", "8"))
+DIGEST_INTERVAL_HOURS = float(os.environ.get("DIGEST_INTERVAL_HOURS", "4"))
 UA = "Mozilla/5.0 (compatible; AuditMonitorBot/1.0; +https://github.com/amin00216/audits)"
 
 OPEN_STATUSES = {"live", "active", "upcoming", "open", "ongoing", "starting"}
@@ -349,7 +349,7 @@ def load_state():
                 return json.load(f)
         except Exception:
             pass
-    return {"seen_contests": [], "seen_protocols": [], "last_digest_date": None, "bootstrapped": False}
+    return {"seen_contests": [], "seen_protocols": [], "last_digest_at": None, "bootstrapped": False}
 
 
 def save_state(state):
@@ -471,10 +471,17 @@ def main():
         send_telegram("\n".join(lines))
 
     now = datetime.now(timezone.utc)
-    today = now.date().isoformat()
-    should_digest = now.hour >= DIGEST_HOUR_UTC and state.get("last_digest_date") != today
+    last_digest_at = state.get("last_digest_at")
+    should_digest = True
+    if last_digest_at:
+        try:
+            elapsed = now - datetime.fromisoformat(last_digest_at)
+            should_digest = elapsed.total_seconds() >= DIGEST_INTERVAL_HOURS * 3600
+        except Exception:
+            should_digest = True
     if should_digest:
-        lines = [f"\U0001F4CB <b>Daily audit/bounty digest — {today}</b>", ""]
+        stamp = now.strftime("%Y-%m-%d %H:%M UTC")
+        lines = [f"\U0001F4CB <b>Audit/bounty status — {stamp}</b>", ""]
         lines.append(f"<u>Open contests ({len(open_contests)})</u>")
         if open_contests:
             for c in open_contests:
@@ -482,10 +489,10 @@ def main():
         else:
             lines.append("none found")
         lines.append("")
-        todays_new = sorted(pending.values(), key=lambda x: -(x.get("tvl") or 0))
-        lines.append(f"<u>New protocols today ≥$1M TVL ({len(todays_new)})</u>")
-        if todays_new:
-            for p in todays_new[:10]:
+        recent_new = sorted(pending.values(), key=lambda x: -(x.get("tvl") or 0))
+        lines.append(f"<u>New protocols since last update ≥$1M TVL ({len(recent_new)})</u>")
+        if recent_new:
+            for p in recent_new[:10]:
                 lines.append("• " + fmt_protocol(p))
         else:
             lines.append(f"none — {len(protocols)} total tracked, unchanged")
@@ -495,7 +502,7 @@ def main():
             for e in errors:
                 lines.append("• " + e)
         send_telegram("\n".join(lines))
-        state["last_digest_date"] = today
+        state["last_digest_at"] = now.isoformat()
         pending = {}  # reset accumulator after reporting
 
     state["pending_new_protocols"] = list(pending.values())

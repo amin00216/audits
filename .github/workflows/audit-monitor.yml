@@ -3,8 +3,8 @@ name: Audit & Bounty Monitor
 on:
   schedule:
     # Near-real-time new-contest/new-protocol check. The script itself
-    # decides once per UTC day (after DIGEST_HOUR_UTC) to also send the
-    # consolidated daily digest, so one schedule covers both jobs.
+    # decides every DIGEST_INTERVAL_HOURS to also send the consolidated
+    # status update, so one schedule covers both jobs.
     - cron: "*/30 * * * *"
   workflow_dispatch: {}
   push:
@@ -39,7 +39,7 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          DIGEST_HOUR_UTC: "8"
+          DIGEST_INTERVAL_HOURS: "4"
         run: python scripts/scan.py 2>&1 | tee last-run.log
 
       - name: Commit updated state

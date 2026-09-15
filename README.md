@@ -3,7 +3,7 @@
 Scans Immunefi, Code4rena, Sherlock, Cantina and CodeHawks for open audit
 contests, and DefiLlama for newly-listed DeFi protocols with >= $1M TVL.
 Posts to a Telegram group: an immediate alert the moment something new
-shows up, plus one consolidated daily digest.
+shows up, plus a consolidated status update every 4 hours.
 
 Runs entirely inside GitHub Actions (`.github/workflows/audit-monitor.yml`)
 on a `*/30 * * * *` schedule, so it isn't dependent on any external
@@ -37,12 +37,15 @@ before will trigger an alert from then on.
 
 ## Known limitation
 
-Code4rena, Sherlock, CodeHawks and Immunefi are scraped with a generic
-heuristic (look for a Next.js `__NEXT_DATA__` payload embedded in the
-page, then pattern-match dict entries that look like a contest listing).
-This was written without the ability to hit those sites live to verify
-exact field names, so it may need a tuning pass — check the Action run
-logs for `[warn]` lines naming which source failed to parse, and the
-daily digest will also name any source it couldn't read. Cantina
-(`cantina.xyz/api/v0/opportunities`) and DefiLlama (`api.llama.fi/protocols`)
-use documented JSON APIs and should be reliable from the start.
+Sherlock, Cantina and DefiLlama use documented/stable JSON APIs, fetched
+directly — reliable by construction. Immunefi, Code4rena and CodeHawks
+have no public API (confirmed via `diagnose.py` against live traffic): they're
+rendered with Playwright and parsed from the visible page text with a
+line-pattern parser tuned to each site's current card layout. That's more
+fragile than a real API — if one of those sites redesigns its contest
+page, its parser will likely start returning zero listings. The status
+update names any source that fails to parse rather than silently going
+quiet; if that happens, push a change to `scripts/diagnose.py` (or just
+edit its `TARGETS`/`API_TARGETS` dicts) to re-run the diagnostic workflow
+and see what the page looks like now, then re-tune the matching
+`scan_*()` function in `scan.py`.
