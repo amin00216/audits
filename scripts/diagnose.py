@@ -21,6 +21,7 @@ Usage patterns (fill in whichever dict you need, leave the rest empty):
 import asyncio
 import json
 import sys
+import urllib.error
 import urllib.request
 
 from playwright.async_api import async_playwright
@@ -29,9 +30,7 @@ TARGETS = {}
 API_TARGETS = {}
 SEARCH_TESTS = {}
 
-GRAPHQL_CAPTURE_TARGETS = {
-    "hackerone_graphql": "https://hackerone.com/opportunities/all/search?bbp=true&ordering=Newest+programs",
-}
+GRAPHQL_CAPTURE_TARGETS = {}
 
 
 async def capture_graphql(browser, name, url, url_filter):
@@ -97,6 +96,64 @@ async def diagnose_one(browser, name, url):
         calls.append({"error": f"navigation error: {e}"})
     await page.close()
     return {"calls": calls, "rendered_text_len": len(text) if text else None, "rendered_text": text}
+
+
+def fetch_post_json(url, body_obj, headers=None):
+    data = json.dumps(body_obj).encode()
+    req = urllib.request.Request(url, data=data, method="POST", headers={
+        "User-Agent": "Mozilla/5.0 (compatible; AuditMonitorBot/1.0)",
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        **(headers or {}),
+    })
+    try:
+        with urllib.request.urlopen(req, timeout=20) as resp:
+            body = resp.read().decode("utf-8", errors="replace")
+            try:
+                return {"status": resp.status, "json": json.loads(body)}
+            except Exception:
+                return {"status": resp.status, "text": body[:3000]}
+    except urllib.error.HTTPError as e:
+        return {"status": e.code, "error_body": e.read().decode("utf-8", errors="replace")[:2000]}
+    except Exception as e:
+        return {"error": str(e)}
+
+
+HACKERONE_DISCOVERY_QUERY = """query DiscoveryQuery($query: OpportunitiesQuery!, $filter: QueryInput!, $from: Int, $size: Int, $sort: [SortInput!], $post_filters: OpportunitiesFilterInput) {
+  me { id __typename }
+  opportunities_search(query: $query, filter: $filter, from: $from, size: $size, sort: $sort, post_filters: $post_filters) {
+    nodes {
+      ... on OpportunityDocument {
+        id handle state name launched_at offers_bounties last_updated_at
+        currency team_type minimum_bounty_table_value maximum_bounty_table_value
+        submission_state
+      }
+      __typename
+    }
+    total_count
+    __typename
+  }
+}"""
+
+POST_API_TARGETS = {
+    "hackerone_discovery_direct": {
+        "url": "https://hackerone.com/graphql",
+        "body": {
+            "operationName": "DiscoveryQuery",
+            "variables": {
+                "size": 10, "from": 0, "query": {},
+                "filter": {"bool": {"filter": [{"bool": {
+                    "must_not": {"term": {"team_type": "Engagements::Assessment"}},
+                    "should": [{"term": {"offers_bounties": True}}],
+                }}, None]}},
+                "sort": [{"field": "launched_at", "direction": "DESC"}],
+                "post_filters": {"my_programs": False, "bookmarked": False, "campaign_teams": False},
+                "product_area": "opportunity_discovery", "product_feature": "search",
+            },
+            "query": HACKERONE_DISCOVERY_QUERY,
+        },
+    },
+}
 
 
 def fetch_api(url):
@@ -171,6 +228,10 @@ async def main():
     for name, url in API_TARGETS.items():
         print(f"[diagnose] fetching {name} ({url})")
         results[name] = fetch_api(url)
+
+    for name, cfg in POST_API_TARGETS.items():
+        print(f"[diagnose] POSTing {name} ({cfg['url']})")
+        results[name] = fetch_post_json(cfg["url"], cfg["body"], cfg.get("headers"))
 
     if TARGETS or SEARCH_TESTS or GRAPHQL_CAPTURE_TARGETS:
         async with async_playwright() as p:
