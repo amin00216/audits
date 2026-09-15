@@ -1,4 +1,3 @@
 [diagnose] fetching sherlock_bug_bounties_api (https://audits.sherlock.xyz/api/bug-bounties?page=1&per_page=20)
-[diagnose] search test immunefi_interactive_lombard (https://immunefi.com/bug-bounty/ -> 'Lombard')
-[diagnose] search test hackenproof_interactive_cetus (https://hackenproof.com/programs -> 'Cetus')
+[diagnose] inspecting inputs on hackenproof_inputs (https://hackenproof.com/programs)
 [diagnose] wrote diagnose-output.json
