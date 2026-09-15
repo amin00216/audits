@@ -10,8 +10,13 @@ on:
   push:
     branches: [main]
     paths:
+      # Deliberately NOT scripts/** — that would also match
+      # scripts/diagnose.py, which diagnose.yml also triggers on, and two
+      # workflows both queuing into the same concurrency group from one
+      # push causes GitHub to cancel one of them outright rather than
+      # running both in sequence. Keep these two path sets disjoint.
       - ".github/workflows/audit-monitor.yml"
-      - "scripts/**"
+      - "scripts/scan.py"
 
 permissions:
   contents: write
