@@ -1,3 +1,3 @@
 [diagnose] fetching sherlock_bug_bounties_api (https://audits.sherlock.xyz/api/bug-bounties?page=1&per_page=20)
-[diagnose] inspecting inputs on hackenproof_inputs (https://hackenproof.com/programs)
+[diagnose] search test hackenproof_interactive_v2 (https://hackenproof.com/programs -> 'Cetus')
 [diagnose] wrote diagnose-output.json
