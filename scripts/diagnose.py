@@ -57,7 +57,9 @@ async def capture_graphql(browser, name, url, url_filter):
     page.on("response", lambda r: asyncio.ensure_future(on_response(r)))
     try:
         await page.goto(url, wait_until="networkidle", timeout=45000)
-        await page.wait_for_timeout(3000)
+        await page.wait_for_timeout(4000)
+        await page.mouse.wheel(0, 2000)
+        await page.wait_for_timeout(4000)
     except Exception as e:
         captured.append({"nav_error": str(e)})
     await page.close()
