@@ -1,2 +1,2 @@
-[diagnose] capturing graphql for hackerone_graphql (https://hackerone.com/opportunities/all/search?bbp=true&ordering=Newest+programs)
+[diagnose] POSTing hackerone_discovery_direct (https://hackerone.com/graphql)
 [diagnose] wrote diagnose-output.json
