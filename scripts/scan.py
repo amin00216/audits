@@ -612,9 +612,11 @@ def main():
             lines.append("none found")
         lines.append("")
         recent_new = sorted(pending.values(), key=lambda x: -(x.get("tvl") or 0))
-        lines.append(f"<u>New protocols since last update ≥$1M TVL ({len(recent_new)})</u>")
+        top5 = recent_new[:5]
+        header = f"<u>New protocols since last update ≥$1M TVL — top {len(top5)} of {len(recent_new)}</u>"
+        lines.append(header)
         if recent_new:
-            for p in recent_new[:10]:
+            for p in top5:
                 lines.append("• " + fmt_protocol(p, with_bounty_check=True))
         else:
             lines.append(f"none — {len(protocols)} total tracked, unchanged")
