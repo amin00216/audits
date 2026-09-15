@@ -9,6 +9,12 @@ leaving the check entirely manual. Posts to a Telegram group: an
 immediate alert the moment something new shows up, plus a consolidated
 status update every 4 hours.
 
+**Links**: every open contest alert includes a real, contest-specific URL
+(not just the platform's generic listing page — see "Real contest links"
+below). Protocol alerts deliberately do *not* link to the DefiLlama
+protocol page, since that's just a TVL listing, not a bounty program or
+contest, and linking it would misrepresent what it is.
+
 Runs entirely inside GitHub Actions (`.github/workflows/audit-monitor.yml`)
 on a `*/30 * * * *` schedule, so it isn't dependent on any external
 session and has normal outbound internet access.
@@ -38,6 +44,20 @@ has already seen, and is committed back by the workflow after each run.
 The **first ever run only seeds this state** — it will not blast every
 currently-open contest as "new"; only entries the script hasn't seen
 before will trigger an alert from then on.
+
+## Real contest links
+
+Cantina's API returns a competition id, so its link is built directly:
+`cantina.xyz/competitions/<id>`. Immunefi, Code4rena and CodeHawks have no
+per-item URL in their scraped text (see "Known limitation" below) — for
+those, `get_rendered_text_and_links()` also captures every `<a href>` on
+the page, and `find_link_for_name()` matches each listing's display name
+back to its real link (exact match preferred, substring match as
+fallback), scoped first to a path hint like `/audits/` to avoid matching
+nav links. Falls back to the platform's generic listing page only if no
+match is found. Verified against live data (`LINK_MATCH_TEST` in
+`diagnose.py`): all 4 test names resolved to exactly the right contest
+URL.
 
 ## Bug-bounty cross-check
 

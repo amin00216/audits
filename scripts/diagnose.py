@@ -31,8 +31,11 @@ SEARCH_TESTS = {}
 
 # One-off: verify find_link_for_name() resolves real per-contest URLs
 # against live Code4rena/CodeHawks data (using scan.py's own sync-API
-# implementation, so this tests the exact code that ships).
-LINK_MATCH_TEST = True
+# implementation, so this tests the exact code that ships). Verified
+# 2026-09-15: all 4 test names resolved to exactly the right contest
+# URL. Flip back to True (and see run_link_match_test() below) to
+# re-verify after changing the matching logic.
+LINK_MATCH_TEST = False
 
 
 async def diagnose_one(browser, name, url):
