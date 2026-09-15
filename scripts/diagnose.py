@@ -28,7 +28,13 @@ from playwright.async_api import async_playwright
 
 TARGETS = {}
 API_TARGETS = {}
-SEARCH_TESTS = {}
+SEARCH_TESTS = {
+    "immunefi_search_allbridge": {
+        "url": "https://immunefi.com/bug-bounty/",
+        "input_selector": "input[type='search'], input[placeholder*='earch' i]",
+        "query": "Allbridge",
+    },
+}
 
 GRAPHQL_CAPTURE_TARGETS = {}
 
