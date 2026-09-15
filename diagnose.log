@@ -1,5 +1,5 @@
-[diagnose] visiting immunefi_bounties (https://immunefi.com/bug-bounty/)
-[diagnose] visiting hackenproof_programs (https://hackenproof.com/programs)
-[diagnose] visiting cantina_bounties (https://cantina.xyz/bounties)
-[diagnose] visiting sherlock_bounties (https://audits.sherlock.xyz/bug-bounties)
+[diagnose] visiting immunefi_search_cetus (https://immunefi.com/bug-bounty/?search=Cetus)
+[diagnose] visiting immunefi_search_lombard (https://immunefi.com/bug-bounty/?search=Lombard)
+[diagnose] visiting hackenproof_search_cetus (https://hackenproof.com/programs?search=Cetus)
+[diagnose] visiting hackenproof_search_nonsense (https://hackenproof.com/programs?search=Zzzznonexistentprotocolxyz)
 [diagnose] wrote diagnose-output.json
