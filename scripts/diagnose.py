@@ -11,9 +11,9 @@ import json
 from playwright.async_api import async_playwright
 
 TARGETS = {
-    "immunefi": "https://immunefi.com/audit-competition/",
+    # immunefi and sherlock already have clean JSON APIs identified from the
+    # first diagnostic pass — no need to keep rendering them with a browser.
     "code4rena": "https://code4rena.com/audits",
-    "sherlock": "https://audits.sherlock.xyz/contests",
     "codehawks": "https://codehawks.cyfrin.io",
 }
 
@@ -32,15 +32,15 @@ async def diagnose_one(browser, name, url):
             calls.append({"error": f"listener error: {e}"})
 
     page.on("response", on_response)
+    text = None
     try:
         await page.goto(url, wait_until="networkidle", timeout=45000)
         await page.wait_for_timeout(3000)
-        text_len = len(await page.inner_text("body"))
+        text = await page.inner_text("body")
     except Exception as e:
         calls.append({"error": f"navigation error: {e}"})
-        text_len = None
     await page.close()
-    return {"calls": calls, "rendered_text_len": text_len}
+    return {"calls": calls, "rendered_text_len": len(text) if text else None, "rendered_text": text}
 
 
 async def main():
