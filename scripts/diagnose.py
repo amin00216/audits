@@ -20,6 +20,7 @@ Usage patterns (fill in whichever dict you need, leave the rest empty):
 """
 import asyncio
 import json
+import sys
 import urllib.request
 
 from playwright.async_api import async_playwright
@@ -27,6 +28,11 @@ from playwright.async_api import async_playwright
 TARGETS = {}
 API_TARGETS = {}
 SEARCH_TESTS = {}
+
+# One-off: verify find_link_for_name() resolves real per-contest URLs
+# against live Code4rena/CodeHawks data (using scan.py's own sync-API
+# implementation, so this tests the exact code that ships).
+LINK_MATCH_TEST = True
 
 
 async def diagnose_one(browser, name, url):
@@ -101,6 +107,26 @@ async def search_test(browser, name, cfg):
     return result
 
 
+def run_link_match_test():
+    import os
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import scan  # noqa: reuses the shipped, sync-API implementation as-is
+    out = {}
+    for platform, url, path_hint, names in [
+        ("code4rena", "https://code4rena.com/audits", "/audits/", ["Rujira", "Monetrix", "K2"]),
+        ("codehawks", "https://codehawks.cyfrin.io", "/c/", ["BattleChain Confidence Pools"]),
+    ]:
+        text, links = scan.get_rendered_text_and_links(url)
+        out[platform] = {
+            "num_links": len(links),
+            "matches": {name: scan.find_link_for_name(links, name, path_hint=path_hint) for name in names},
+            "sample_links": links[:15],
+        }
+    if scan._BROWSER:
+        scan._BROWSER.close()
+    return out
+
+
 async def main():
     results = {}
     for name, url in API_TARGETS.items():
@@ -124,4 +150,14 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    if LINK_MATCH_TEST:
+        # Uses scan.py's sync Playwright API — must run outside the
+        # asyncio event loop the rest of this file uses, or Playwright's
+        # sync API raises ("Sync API inside asyncio loop").
+        print("[diagnose] running link-match test against scan.py's real functions")
+        link_match_result = run_link_match_test()
+        with open("diagnose-output.json", "w") as f:
+            json.dump({"link_match_test": link_match_result}, f, indent=2)
+        print("[diagnose] wrote diagnose-output.json (link_match_test only)")
+    else:
+        asyncio.run(main())
