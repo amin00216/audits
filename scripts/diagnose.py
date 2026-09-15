@@ -25,13 +25,43 @@ import urllib.request
 
 from playwright.async_api import async_playwright
 
-TARGETS = {
-    "hackerone_newest": "https://hackerone.com/opportunities/all/search?bbp=true&ordering=Newest+programs",
-    "immunefi_bounties_sorted": "https://immunefi.com/bug-bounty/",
-    "hackenproof_sorted": "https://hackenproof.com/programs",
-}
+TARGETS = {}
 API_TARGETS = {}
 SEARCH_TESTS = {}
+
+GRAPHQL_CAPTURE_TARGETS = {
+    "hackerone_graphql": "https://hackerone.com/opportunities/all/search?bbp=true&ordering=Newest+programs",
+}
+
+
+async def capture_graphql(browser, name, url, url_filter):
+    page = await browser.new_page()
+    captured = []
+
+    async def on_response(resp):
+        if url_filter not in resp.url:
+            return
+        try:
+            req = resp.request
+            entry = {"url": resp.url, "status": resp.status, "method": req.method}
+            if req.method == "POST":
+                entry["post_data"] = req.post_data
+            try:
+                entry["response_body"] = (await resp.text())[:4000]
+            except Exception as e:
+                entry["response_body_error"] = str(e)
+            captured.append(entry)
+        except Exception as e:
+            captured.append({"error": str(e)})
+
+    page.on("response", lambda r: asyncio.ensure_future(on_response(r)))
+    try:
+        await page.goto(url, wait_until="networkidle", timeout=45000)
+        await page.wait_for_timeout(3000)
+    except Exception as e:
+        captured.append({"nav_error": str(e)})
+    await page.close()
+    return captured
 
 # One-off: verify find_link_for_name() resolves real per-contest URLs
 # against live Code4rena/CodeHawks data (using scan.py's own sync-API
@@ -140,7 +170,7 @@ async def main():
         print(f"[diagnose] fetching {name} ({url})")
         results[name] = fetch_api(url)
 
-    if TARGETS or SEARCH_TESTS:
+    if TARGETS or SEARCH_TESTS or GRAPHQL_CAPTURE_TARGETS:
         async with async_playwright() as p:
             browser = await p.chromium.launch()
             for name, url in TARGETS.items():
@@ -149,6 +179,9 @@ async def main():
             for name, cfg in SEARCH_TESTS.items():
                 print(f"[diagnose] search test {name} ({cfg['url']} -> '{cfg['query']}')")
                 results[name] = await search_test(browser, name, cfg)
+            for name, url in GRAPHQL_CAPTURE_TARGETS.items():
+                print(f"[diagnose] capturing graphql for {name} ({url})")
+                results[name] = await capture_graphql(browser, name, url, "graphql")
             await browser.close()
 
     with open("diagnose-output.json", "w") as f:
