@@ -1,8 +1,1 @@
-[warn] TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID not set — skipping send:
-📋 <b>Daily audit/bounty digest — 2026-09-15</b>
-
-<u>Open contests (0)</u>
-none found
-
-<u>New protocols today ≥$1M TVL (0)</u>
-none — 1393 total tracked, unchanged
+[info] Resolved chat_id=-1004185621258 from getUpdates — set this as the TELEGRAM_CHAT_ID secret so future runs don't depend on getUpdates.
