@@ -1,7 +1,261 @@
 {
   "bootstrapped": true,
   "last_digest_at": "2026-09-15T14:49:16.244614+00:00",
+  "pending_new_bounty_programs": [
+    {
+      "id": "HackerOne:box_private",
+      "launched_at": "2026-08-04T14:25:00.632Z",
+      "name": "Box BB",
+      "platform": "HackerOne",
+      "prize": "150-5,000 USD",
+      "status": "open",
+      "url": "https://hackerone.com/box_private"
+    },
+    {
+      "id": "HackerOne:wolt",
+      "launched_at": "2026-07-27T13:25:27.378Z",
+      "name": "Wolt",
+      "platform": "HackerOne",
+      "prize": "100-3,500 USD",
+      "status": "open",
+      "url": "https://hackerone.com/wolt"
+    },
+    {
+      "id": "HackerOne:abercrombie_fitch_bbp",
+      "launched_at": "2026-07-21T14:58:24.627Z",
+      "name": "Abercrombie & Fitch Bug Bounty",
+      "platform": "HackerOne",
+      "prize": "250-4,000 USD",
+      "status": "open",
+      "url": "https://hackerone.com/abercrombie_fitch_bbp"
+    },
+    {
+      "id": "HackerOne:agoda-public",
+      "launched_at": "2026-06-18T08:51:59.714Z",
+      "name": "Agoda Public",
+      "platform": "HackerOne",
+      "prize": "150-6,000 USD",
+      "status": "open",
+      "url": "https://hackerone.com/agoda-public"
+    },
+    {
+      "id": "HackerOne:anthropic",
+      "launched_at": "2026-05-07T19:06:39.180Z",
+      "name": "Anthropic",
+      "platform": "HackerOne",
+      "prize": "100-10,000 USD",
+      "status": "open",
+      "url": "https://hackerone.com/anthropic"
+    },
+    {
+      "id": "HackerOne:coupang_tw",
+      "launched_at": "2026-05-06T00:01:24.699Z",
+      "name": "Coupang Taiwan",
+      "platform": "HackerOne",
+      "prize": "50-6,000 USD",
+      "status": "open",
+      "url": "https://hackerone.com/coupang_tw"
+    },
+    {
+      "id": "HackerOne:coinmate",
+      "launched_at": "2026-04-08T12:29:41.155Z",
+      "name": "CoinMate.io",
+      "platform": "HackerOne",
+      "prize": "10-500 USD",
+      "status": "open",
+      "url": "https://hackerone.com/coinmate"
+    },
+    {
+      "id": "HackerOne:1win_com",
+      "launched_at": "2026-04-01T10:19:05.111Z",
+      "name": "1win",
+      "platform": "HackerOne",
+      "prize": "50-3,000 USD",
+      "status": "open",
+      "url": "https://hackerone.com/1win_com"
+    },
+    {
+      "id": "HackerOne:whatnot",
+      "launched_at": "2026-03-17T13:44:09.799Z",
+      "name": "Whatnot",
+      "platform": "HackerOne",
+      "prize": "300-10,000 USD",
+      "status": "open",
+      "url": "https://hackerone.com/whatnot"
+    },
+    {
+      "id": "HackerOne:clear",
+      "launched_at": "2026-03-02T16:43:22.017Z",
+      "name": "CLEAR",
+      "platform": "HackerOne",
+      "prize": "1-15,000 USD",
+      "status": "open",
+      "url": "https://hackerone.com/clear"
+    },
+    {
+      "id": "HackerOne:meesho_bbp",
+      "launched_at": "2026-02-11T07:20:03.331Z",
+      "name": "Meesho",
+      "platform": "HackerOne",
+      "prize": "100-3,500 USD",
+      "status": "open",
+      "url": "https://hackerone.com/meesho_bbp"
+    },
+    {
+      "id": "HackerOne:vercel-open-source",
+      "launched_at": "2026-02-03T15:48:56.504Z",
+      "name": "Vercel Open Source",
+      "platform": "HackerOne",
+      "prize": "50-10,000 USD",
+      "status": "open",
+      "url": "https://hackerone.com/vercel-open-source"
+    },
+    {
+      "id": "HackerOne:twilio",
+      "launched_at": "2026-01-21T18:24:24.227Z",
+      "name": "Twilio",
+      "platform": "HackerOne",
+      "prize": "50-8,000 USD",
+      "status": "open",
+      "url": "https://hackerone.com/twilio"
+    },
+    {
+      "id": "HackerOne:anduril_industries",
+      "launched_at": "2026-01-20T15:04:21.018Z",
+      "name": "Anduril Industries",
+      "platform": "HackerOne",
+      "prize": "50-25,000 USD",
+      "status": "open",
+      "url": "https://hackerone.com/anduril_industries"
+    },
+    {
+      "id": "HackerOne:unico_idtech",
+      "launched_at": "2026-01-13T15:43:37.144Z",
+      "name": "Unico IDtech",
+      "platform": "HackerOne",
+      "prize": "150-10,000 USD",
+      "status": "open",
+      "url": "https://hackerone.com/unico_idtech"
+    },
+    {
+      "id": "HackenProof:Hotcoin Web & Mobile",
+      "launched_at": "14 Sep 2026",
+      "name": "Hotcoin Web & Mobile",
+      "platform": "HackenProof",
+      "prize": "up to $1,000",
+      "status": "live",
+      "url": "https://hackenproof.com/programs"
+    },
+    {
+      "id": "HackenProof:Bullbit QA Testing",
+      "launched_at": "04 Sep 2026",
+      "name": "Bullbit QA Testing",
+      "platform": "HackenProof",
+      "prize": "up to $50",
+      "status": "paused",
+      "url": "https://hackenproof.com/programs"
+    },
+    {
+      "id": "HackenProof:Hinkal Bug Bounty",
+      "launched_at": "03 Sep 2026",
+      "name": "Hinkal Bug Bounty",
+      "platform": "HackenProof",
+      "prize": "up to $10,000",
+      "status": "live",
+      "url": "https://hackenproof.com/programs"
+    },
+    {
+      "id": "HackenProof:ADI Predictstreet Smart Contracts",
+      "launched_at": "13 Jul 2026",
+      "name": "ADI Predictstreet Smart Contracts",
+      "platform": "HackenProof",
+      "prize": "up to $10,000",
+      "status": "live",
+      "url": "https://hackenproof.com/programs"
+    },
+    {
+      "id": "HackenProof:Zynk Protocol",
+      "launched_at": "06 Jul 2026",
+      "name": "Zynk Protocol",
+      "platform": "HackenProof",
+      "prize": "up to $5,000",
+      "status": "paused",
+      "url": "https://hackenproof.com/programs"
+    },
+    {
+      "id": "HackenProof:Starknet Staking",
+      "launched_at": "01 Jul 2026",
+      "name": "Starknet Staking",
+      "platform": "HackenProof",
+      "prize": "up to $100,000",
+      "status": "live",
+      "url": "https://hackenproof.com/programs"
+    },
+    {
+      "id": "HackenProof:Starknet Web & SC",
+      "launched_at": "01 Jul 2026",
+      "name": "Starknet Web & SC",
+      "platform": "HackenProof",
+      "prize": "up to $250,000",
+      "status": "live",
+      "url": "https://hackenproof.com/programs"
+    },
+    {
+      "id": "HackenProof:Starknet Blockchain/DLT",
+      "launched_at": "01 Jul 2026",
+      "name": "Starknet Blockchain/DLT",
+      "platform": "HackenProof",
+      "prize": "up to $250,000",
+      "status": "live",
+      "url": "https://hackenproof.com/programs"
+    },
+    {
+      "id": "HackenProof:Arcadia Finance Smart Contracts",
+      "launched_at": "10 Jun 2026",
+      "name": "Arcadia Finance Smart Contracts",
+      "platform": "HackenProof",
+      "prize": "up to $25,000",
+      "status": "live",
+      "url": "https://hackenproof.com/programs"
+    },
+    {
+      "id": "HackenProof:Zeko Protocol",
+      "launched_at": "02 Jun 2026",
+      "name": "Zeko Protocol",
+      "platform": "HackenProof",
+      "prize": "up to $3,000",
+      "status": "paused",
+      "url": "https://hackenproof.com/programs"
+    }
+  ],
   "pending_new_protocols": [],
+  "seen_bounty_programs": [
+    "HackenProof:ADI Predictstreet Smart Contracts",
+    "HackenProof:Arcadia Finance Smart Contracts",
+    "HackenProof:Bullbit QA Testing",
+    "HackenProof:Hinkal Bug Bounty",
+    "HackenProof:Hotcoin Web & Mobile",
+    "HackenProof:Starknet Blockchain/DLT",
+    "HackenProof:Starknet Staking",
+    "HackenProof:Starknet Web & SC",
+    "HackenProof:Zeko Protocol",
+    "HackenProof:Zynk Protocol",
+    "HackerOne:1win_com",
+    "HackerOne:abercrombie_fitch_bbp",
+    "HackerOne:agoda-public",
+    "HackerOne:anduril_industries",
+    "HackerOne:anthropic",
+    "HackerOne:box_private",
+    "HackerOne:clear",
+    "HackerOne:coinmate",
+    "HackerOne:coupang_tw",
+    "HackerOne:meesho_bbp",
+    "HackerOne:twilio",
+    "HackerOne:unico_idtech",
+    "HackerOne:vercel-open-source",
+    "HackerOne:whatnot",
+    "HackerOne:wolt"
+  ],
   "seen_contests": [
     "Cantina:3709ca85-4050-407e-9b36-51f5d5ea9b00",
     "Cantina:4d285eee-602e-440a-845e-25e155cec26a",
