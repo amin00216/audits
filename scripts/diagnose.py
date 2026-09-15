@@ -20,7 +20,31 @@ API_TARGETS = {
 # Interactive search tests: type into each platform's real search box (URL
 # query params don't filter — confirmed via prior diagnostic run) and see
 # if the result list actually narrows.
-SEARCH_TESTS = {}
+SEARCH_TESTS = {
+    "hackenproof_interactive_v2": {
+        "url": "https://hackenproof.com/programs",
+        "placeholder": "Search by ID or name",
+        "query": "Cetus",
+    },
+}
+
+
+async def search_test_v2(browser, name, cfg):
+    page = await browser.new_page()
+    result = {}
+    try:
+        await page.goto(cfg["url"], wait_until="networkidle", timeout=45000)
+        await page.wait_for_timeout(1500)
+        locator = page.get_by_placeholder(cfg["placeholder"])
+        await locator.click()
+        await locator.fill(cfg["query"])
+        await locator.press("Enter")
+        await page.wait_for_timeout(4000)
+        result["text_after_search"] = await page.inner_text("body")
+    except Exception as e:
+        result["error"] = str(e)
+    await page.close()
+    return result
 
 
 async def inspect_inputs(browser, name, url):
@@ -42,9 +66,7 @@ async def inspect_inputs(browser, name, url):
     return result
 
 
-INSPECT_TARGETS = {
-    "hackenproof_inputs": "https://hackenproof.com/programs",
-}
+INSPECT_TARGETS = {}
 
 
 async def search_test(browser, name, cfg):
@@ -128,7 +150,7 @@ async def main():
                 results[name] = await diagnose_one(browser, name, url)
             for name, cfg in SEARCH_TESTS.items():
                 print(f"[diagnose] search test {name} ({cfg['url']} -> '{cfg['query']}')")
-                results[name] = await search_test(browser, name, cfg)
+                results[name] = await search_test_v2(browser, name, cfg)
             for name, url in INSPECT_TARGETS.items():
                 print(f"[diagnose] inspecting inputs on {name} ({url})")
                 results[name] = await inspect_inputs(browser, name, url)
