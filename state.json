@@ -1,6 +1,6 @@
 {
   "bootstrapped": true,
-  "last_digest_at": "2026-09-15T09:43:50.931462+00:00",
+  "last_digest_at": "2026-09-15T13:45:12.158096+00:00",
   "pending_new_protocols": [],
   "seen_contests": [
     "Cantina:3709ca85-4050-407e-9b36-51f5d5ea9b00",
@@ -1062,6 +1062,7 @@
     "defillama:shape-bridge",
     "defillama:sharpbyte-capital",
     "defillama:shibaswap-v1",
+    "defillama:shield-swap",
     "defillama:shmonad",
     "defillama:shui",
     "defillama:sierra-protocol",
