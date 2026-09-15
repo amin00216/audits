@@ -11,10 +11,14 @@ import urllib.request
 
 from playwright.async_api import async_playwright
 
-TARGETS = {}
+TARGETS = {
+    # the "dice" API turned out to return an empty carousel, not the real
+    # listing — fall back to rendering the page like code4rena/codehawks.
+    "immunefi": "https://immunefi.com/audit-competition/",
+}
 
 API_TARGETS = {
-    "immunefi_api": "https://immunefi.com/public-api/bounties/assets/dice/?type=audit-competitions",
+    "immunefi_count_api": "https://immunefi.com/api/audit-competition/count/",
     "sherlock_api": "https://audits.sherlock.xyz/api/contests?order_by_date=false&page=1&per_page=20",
 }
 
