@@ -1,3 +1,4 @@
-[diagnose] fetching immunefi_api (https://immunefi.com/public-api/bounties/assets/dice/?type=audit-competitions)
+[diagnose] fetching immunefi_count_api (https://immunefi.com/api/audit-competition/count/)
 [diagnose] fetching sherlock_api (https://audits.sherlock.xyz/api/contests?order_by_date=false&page=1&per_page=20)
+[diagnose] visiting immunefi (https://immunefi.com/audit-competition/)
 [diagnose] wrote diagnose-output.json
