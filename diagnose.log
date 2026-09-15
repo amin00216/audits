@@ -1,4 +1,1 @@
-[diagnose] fetching sherlock_bug_bounties_api (https://audits.sherlock.xyz/api/bug-bounties?page=1&per_page=20)
-[diagnose] search test immunefi_negative_test (https://immunefi.com/bug-bounty/ -> 'Zzzznonexistentprotocolxyz123')
-[diagnose] search test immunefi_positive_test2 (https://immunefi.com/bug-bounty/ -> 'Cosmos')
 [diagnose] wrote diagnose-output.json
