@@ -1,2 +1,2 @@
-[diagnose] POSTing hackerone_discovery_direct (https://hackerone.com/graphql)
-[diagnose] wrote diagnose-output.json
+[diagnose] running scanner test against scan.py's real functions
+[diagnose] wrote diagnose-output.json (sync tests only)

@@ -1,166 +1,160 @@
 {
-  "hackerone_discovery_direct": {
-    "status": 200,
-    "json": {
-      "data": {
-        "me": null,
-        "opportunities_search": {
-          "nodes": [
-            {
-              "id": "Z2lkOi8vaGFja2Vyb25lL09wcG9ydHVuaXRpZXNJbmRleC80MjAwNg==",
-              "handle": "box_private",
-              "state": "public_mode",
-              "name": "Box BB",
-              "launched_at": "2026-08-04T14:25:00.632Z",
-              "offers_bounties": true,
-              "last_updated_at": "2026-09-01T19:17:55.390Z",
-              "currency": "usd",
-              "team_type": "Engagements::BugBountyProgram",
-              "minimum_bounty_table_value": 150,
-              "maximum_bounty_table_value": 5000,
-              "submission_state": "open",
-              "__typename": "OpportunityDocument"
-            },
-            {
-              "id": "Z2lkOi8vaGFja2Vyb25lL09wcG9ydHVuaXRpZXNJbmRleC8xMTQ0MTg=",
-              "handle": "wolt",
-              "state": "public_mode",
-              "name": "Wolt",
-              "launched_at": "2026-07-27T13:25:27.378Z",
-              "offers_bounties": true,
-              "last_updated_at": "2026-07-21T08:45:18.132Z",
-              "currency": "usd",
-              "team_type": "Engagements::BugBountyProgram",
-              "minimum_bounty_table_value": 100,
-              "maximum_bounty_table_value": 3500,
-              "submission_state": "open",
-              "__typename": "OpportunityDocument"
-            },
-            {
-              "id": "Z2lkOi8vaGFja2Vyb25lL09wcG9ydHVuaXRpZXNJbmRleC81ODE4NA==",
-              "handle": "abercrombie_fitch_bbp",
-              "state": "public_mode",
-              "name": "Abercrombie & Fitch Bug Bounty",
-              "launched_at": "2026-07-21T14:58:24.627Z",
-              "offers_bounties": true,
-              "last_updated_at": "2023-07-18T18:19:18.296Z",
-              "currency": "usd",
-              "team_type": "Engagements::BugBountyProgram",
-              "minimum_bounty_table_value": 250,
-              "maximum_bounty_table_value": 4000,
-              "submission_state": "open",
-              "__typename": "OpportunityDocument"
-            },
-            {
-              "id": "Z2lkOi8vaGFja2Vyb25lL09wcG9ydHVuaXRpZXNJbmRleC84MTk1Mw==",
-              "handle": "agoda-public",
-              "state": "public_mode",
-              "name": "Agoda Public",
-              "launched_at": "2026-06-18T08:51:59.714Z",
-              "offers_bounties": true,
-              "last_updated_at": "2026-06-14T17:32:02.318Z",
-              "currency": "usd",
-              "team_type": "Engagements::BugBountyProgram",
-              "minimum_bounty_table_value": 150,
-              "maximum_bounty_table_value": 6000,
-              "submission_state": "open",
-              "__typename": "OpportunityDocument"
-            },
-            {
-              "id": "Z2lkOi8vaGFja2Vyb25lL09wcG9ydHVuaXRpZXNJbmRleC83MDg5Mg==",
-              "handle": "anthropic",
-              "state": "public_mode",
-              "name": "Anthropic",
-              "launched_at": "2026-05-07T19:06:39.180Z",
-              "offers_bounties": true,
-              "last_updated_at": "2026-07-15T15:04:29.930Z",
-              "currency": "usd",
-              "team_type": "Engagements::BugBountyProgram",
-              "minimum_bounty_table_value": 100,
-              "maximum_bounty_table_value": 10000,
-              "submission_state": "open",
-              "__typename": "OpportunityDocument"
-            },
-            {
-              "id": "Z2lkOi8vaGFja2Vyb25lL09wcG9ydHVuaXRpZXNJbmRleC8xMDkzMDk=",
-              "handle": "coupang_tw",
-              "state": "public_mode",
-              "name": "Coupang Taiwan",
-              "launched_at": "2026-05-06T00:01:24.699Z",
-              "offers_bounties": true,
-              "last_updated_at": "2026-03-18T01:45:57.633Z",
-              "currency": "usd",
-              "team_type": "Engagements::BugBountyProgram",
-              "minimum_bounty_table_value": 50,
-              "maximum_bounty_table_value": 6000,
-              "submission_state": "open",
-              "__typename": "OpportunityDocument"
-            },
-            {
-              "id": "Z2lkOi8vaGFja2Vyb25lL09wcG9ydHVuaXRpZXNJbmRleC80NDA=",
-              "handle": "coinmate",
-              "state": "public_mode",
-              "name": "CoinMate.io",
-              "launched_at": "2026-04-08T12:29:41.155Z",
-              "offers_bounties": true,
-              "last_updated_at": "2026-04-08T12:29:24.745Z",
-              "currency": "usd",
-              "team_type": "Engagements::BugBountyProgram",
-              "minimum_bounty_table_value": 10,
-              "maximum_bounty_table_value": 500,
-              "submission_state": "open",
-              "__typename": "OpportunityDocument"
-            },
-            {
-              "id": "Z2lkOi8vaGFja2Vyb25lL09wcG9ydHVuaXRpZXNJbmRleC8xMDMzNjU=",
-              "handle": "1win_com",
-              "state": "public_mode",
-              "name": "1win",
-              "launched_at": "2026-04-01T10:19:05.111Z",
-              "offers_bounties": true,
-              "last_updated_at": "2025-08-06T13:16:01.945Z",
-              "currency": "usd",
-              "team_type": "Engagements::BugBountyProgram",
-              "minimum_bounty_table_value": 50,
-              "maximum_bounty_table_value": 3000,
-              "submission_state": "open",
-              "__typename": "OpportunityDocument"
-            },
-            {
-              "id": "Z2lkOi8vaGFja2Vyb25lL09wcG9ydHVuaXRpZXNJbmRleC81Mjk3NQ==",
-              "handle": "whatnot",
-              "state": "public_mode",
-              "name": "Whatnot",
-              "launched_at": "2026-03-17T13:44:09.799Z",
-              "offers_bounties": true,
-              "last_updated_at": "2026-03-09T12:46:53.803Z",
-              "currency": "usd",
-              "team_type": "Engagements::BugBountyProgram",
-              "minimum_bounty_table_value": 300,
-              "maximum_bounty_table_value": 10000,
-              "submission_state": "open",
-              "__typename": "OpportunityDocument"
-            },
-            {
-              "id": "Z2lkOi8vaGFja2Vyb25lL09wcG9ydHVuaXRpZXNJbmRleC8yMzI5",
-              "handle": "clear",
-              "state": "public_mode",
-              "name": "CLEAR",
-              "launched_at": "2026-03-02T16:43:22.017Z",
-              "offers_bounties": true,
-              "last_updated_at": "2025-11-15T20:29:35.005Z",
-              "currency": "usd",
-              "team_type": "Engagements::BugBountyProgram",
-              "minimum_bounty_table_value": 1,
-              "maximum_bounty_table_value": 15000,
-              "submission_state": "open",
-              "__typename": "OpportunityDocument"
-            }
-          ],
-          "total_count": 222,
-          "__typename": "SearchResultConnection"
+  "scanner_test": {
+    "scan_hackerone_newest": {
+      "error": null,
+      "count": 15,
+      "sample": [
+        {
+          "platform": "HackerOne",
+          "name": "Box BB",
+          "prize": "150-5,000 USD",
+          "launched_at": "2026-08-04T14:25:00.632Z",
+          "status": "open",
+          "id": "HackerOne:box_private",
+          "url": "https://hackerone.com/box_private"
+        },
+        {
+          "platform": "HackerOne",
+          "name": "Wolt",
+          "prize": "100-3,500 USD",
+          "launched_at": "2026-07-27T13:25:27.378Z",
+          "status": "open",
+          "id": "HackerOne:wolt",
+          "url": "https://hackerone.com/wolt"
+        },
+        {
+          "platform": "HackerOne",
+          "name": "Abercrombie & Fitch Bug Bounty",
+          "prize": "250-4,000 USD",
+          "launched_at": "2026-07-21T14:58:24.627Z",
+          "status": "open",
+          "id": "HackerOne:abercrombie_fitch_bbp",
+          "url": "https://hackerone.com/abercrombie_fitch_bbp"
+        },
+        {
+          "platform": "HackerOne",
+          "name": "Agoda Public",
+          "prize": "150-6,000 USD",
+          "launched_at": "2026-06-18T08:51:59.714Z",
+          "status": "open",
+          "id": "HackerOne:agoda-public",
+          "url": "https://hackerone.com/agoda-public"
+        },
+        {
+          "platform": "HackerOne",
+          "name": "Anthropic",
+          "prize": "100-10,000 USD",
+          "launched_at": "2026-05-07T19:06:39.180Z",
+          "status": "open",
+          "id": "HackerOne:anthropic",
+          "url": "https://hackerone.com/anthropic"
+        },
+        {
+          "platform": "HackerOne",
+          "name": "Coupang Taiwan",
+          "prize": "50-6,000 USD",
+          "launched_at": "2026-05-06T00:01:24.699Z",
+          "status": "open",
+          "id": "HackerOne:coupang_tw",
+          "url": "https://hackerone.com/coupang_tw"
+        },
+        {
+          "platform": "HackerOne",
+          "name": "CoinMate.io",
+          "prize": "10-500 USD",
+          "launched_at": "2026-04-08T12:29:41.155Z",
+          "status": "open",
+          "id": "HackerOne:coinmate",
+          "url": "https://hackerone.com/coinmate"
+        },
+        {
+          "platform": "HackerOne",
+          "name": "1win",
+          "prize": "50-3,000 USD",
+          "launched_at": "2026-04-01T10:19:05.111Z",
+          "status": "open",
+          "id": "HackerOne:1win_com",
+          "url": "https://hackerone.com/1win_com"
         }
-      }
+      ]
+    },
+    "scan_hackenproof_newest": {
+      "error": null,
+      "count": 10,
+      "sample": [
+        {
+          "platform": "HackenProof",
+          "name": "Hotcoin Web & Mobile",
+          "prize": "up to $1,000",
+          "launched_at": "14 Sep 2026",
+          "status": "live",
+          "id": "HackenProof:Hotcoin Web & Mobile",
+          "url": "https://hackenproof.com/programs"
+        },
+        {
+          "platform": "HackenProof",
+          "name": "Bullbit QA Testing",
+          "prize": "up to $50",
+          "launched_at": "04 Sep 2026",
+          "status": "paused",
+          "id": "HackenProof:Bullbit QA Testing",
+          "url": "https://hackenproof.com/programs"
+        },
+        {
+          "platform": "HackenProof",
+          "name": "Hinkal Bug Bounty",
+          "prize": "up to $10,000",
+          "launched_at": "03 Sep 2026",
+          "status": "live",
+          "id": "HackenProof:Hinkal Bug Bounty",
+          "url": "https://hackenproof.com/programs"
+        },
+        {
+          "platform": "HackenProof",
+          "name": "ADI Predictstreet Smart Contracts",
+          "prize": "up to $10,000",
+          "launched_at": "13 Jul 2026",
+          "status": "live",
+          "id": "HackenProof:ADI Predictstreet Smart Contracts",
+          "url": "https://hackenproof.com/programs"
+        },
+        {
+          "platform": "HackenProof",
+          "name": "Zynk Protocol",
+          "prize": "up to $5,000",
+          "launched_at": "06 Jul 2026",
+          "status": "paused",
+          "id": "HackenProof:Zynk Protocol",
+          "url": "https://hackenproof.com/programs"
+        },
+        {
+          "platform": "HackenProof",
+          "name": "Starknet Staking",
+          "prize": "up to $100,000",
+          "launched_at": "01 Jul 2026",
+          "status": "live",
+          "id": "HackenProof:Starknet Staking",
+          "url": "https://hackenproof.com/programs"
+        },
+        {
+          "platform": "HackenProof",
+          "name": "Starknet Web & SC",
+          "prize": "up to $250,000",
+          "launched_at": "01 Jul 2026",
+          "status": "live",
+          "id": "HackenProof:Starknet Web & SC",
+          "url": "https://hackenproof.com/programs"
+        },
+        {
+          "platform": "HackenProof",
+          "name": "Starknet Blockchain/DLT",
+          "prize": "up to $250,000",
+          "launched_at": "01 Jul 2026",
+          "status": "live",
+          "id": "HackenProof:Starknet Blockchain/DLT",
+          "url": "https://hackenproof.com/programs"
+        }
+      ]
     }
   }
 }
