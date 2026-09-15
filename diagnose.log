@@ -1,5 +1,4 @@
-[diagnose] visiting immunefi_search_cetus (https://immunefi.com/bug-bounty/?search=Cetus)
-[diagnose] visiting immunefi_search_lombard (https://immunefi.com/bug-bounty/?search=Lombard)
-[diagnose] visiting hackenproof_search_cetus (https://hackenproof.com/programs?search=Cetus)
-[diagnose] visiting hackenproof_search_nonsense (https://hackenproof.com/programs?search=Zzzznonexistentprotocolxyz)
+[diagnose] fetching sherlock_bug_bounties_api (https://audits.sherlock.xyz/api/bug-bounties?page=1&per_page=20)
+[diagnose] search test immunefi_interactive_lombard (https://immunefi.com/bug-bounty/ -> 'Lombard')
+[diagnose] search test hackenproof_interactive_cetus (https://hackenproof.com/programs -> 'Cetus')
 [diagnose] wrote diagnose-output.json
