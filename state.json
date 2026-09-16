@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-09-16T17:25:46.766033+00:00",
+  "last_digest_at": "2026-09-16T23:07:22.376709+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -86,6 +86,7 @@
     "defillama:alex",
     "defillama:alien-base-v3",
     "defillama:allbridge-classic",
+    "defillama:allstake",
     "defillama:alpaca-finance-2.0",
     "defillama:alpaca-leveraged-yield-farming",
     "defillama:alphafi-agg",
