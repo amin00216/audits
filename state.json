@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-09-15T20:45:42.595365+00:00",
+  "last_digest_at": "2026-09-16T01:31:20.618378+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -19,6 +19,7 @@
     "HackerOne:agoda-public",
     "HackerOne:anduril_industries",
     "HackerOne:anthropic",
+    "HackerOne:arc-bbp",
     "HackerOne:box_private",
     "HackerOne:clear",
     "HackerOne:coinmate",
