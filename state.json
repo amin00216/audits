@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-09-16T23:07:22.376709+00:00",
+  "last_digest_at": "2026-09-17T07:01:19.608097+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -360,6 +360,7 @@
     "defillama:defichain-dex",
     "defillama:defil",
     "defillama:defindex",
+    "defillama:defituna-lending",
     "defillama:degen-bridge",
     "defillama:deltaprime",
     "defillama:depth",
