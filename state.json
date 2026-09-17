@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-09-17T12:41:16.728928+00:00",
+  "last_digest_at": "2026-09-17T17:25:20.460201+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -1326,6 +1326,7 @@
     "defillama:universal-bridge",
     "defillama:universe-xyz",
     "defillama:unslashed",
+    "defillama:up-v2",
     "defillama:up-v3",
     "defillama:upshift",
     "defillama:uranium.io",
