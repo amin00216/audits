@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-09-18T11:35:01.513164+00:00",
+  "last_digest_at": "2026-09-18T15:38:15.937546+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -185,6 +185,7 @@
     "defillama:base-bridge",
     "defillama:baseline-protocol",
     "defillama:bdex-v3",
+    "defillama:beam-swap",
     "defillama:bedrock-unibtc",
     "defillama:bedrock-unieth",
     "defillama:bedrock-uniiotx",
@@ -665,6 +666,7 @@
     "defillama:kaio",
     "defillama:kamino-lend",
     "defillama:kamino-liquidity",
+    "defillama:kamui",
     "defillama:kaoyaswap",
     "defillama:katana",
     "defillama:katana-dex",
