@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-09-18T15:38:15.937546+00:00",
+  "last_digest_at": "2026-09-18T21:23:28.592882+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -333,6 +333,7 @@
     "defillama:concrete",
     "defillama:connext",
     "defillama:contango-v2",
+    "defillama:convergence-fi",
     "defillama:convex-finance",
     "defillama:cooler-loans",
     "defillama:core-bridge",
@@ -1190,6 +1191,7 @@
     "defillama:starknet-bridge",
     "defillama:starknet-btc-staking",
     "defillama:stcelo",
+    "defillama:stcyber",
     "defillama:steakhouse-financial",
     "defillama:steer-protocol",
     "defillama:stellar-amm",
