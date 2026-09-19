@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-09-19T11:18:24.765230+00:00",
+  "last_digest_at": "2026-09-19T17:40:50.860393+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -267,6 +267,7 @@
     "defillama:brickken",
     "defillama:bscswap",
     "defillama:btcfi-cdp",
+    "defillama:btcst",
     "defillama:btse",
     "defillama:bucket-cdp",
     "defillama:bucket-farm",
@@ -707,6 +708,7 @@
     "defillama:kodiak-islands",
     "defillama:kodiak-v3",
     "defillama:koi-finance-amm",
+    "defillama:kolibri",
     "defillama:kongswap",
     "defillama:korbit",
     "defillama:kpk",
