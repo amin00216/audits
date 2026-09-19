@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-09-19T17:40:50.860393+00:00",
+  "last_digest_at": "2026-09-19T22:02:15.661958+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -192,6 +192,7 @@
     "defillama:bedrock-unieth",
     "defillama:bedrock-uniiotx",
     "defillama:beefy",
+    "defillama:beets-dex",
     "defillama:beets-dex-v3",
     "defillama:beets-lst",
     "defillama:belt-finance",
@@ -1046,6 +1047,7 @@
     "defillama:realtyx",
     "defillama:reaper-farm",
     "defillama:reflexer",
+    "defillama:remora-markets",
     "defillama:renzo",
     "defillama:republic-note",
     "defillama:reserve-protocol",
