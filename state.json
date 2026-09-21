@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-09-21T05:13:58.919991+00:00",
+  "last_digest_at": "2026-09-21T10:56:01.502624+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -1094,6 +1094,7 @@
     "defillama:rysk-v12",
     "defillama:saber",
     "defillama:sablier-lockup",
+    "defillama:saddle-finance",
     "defillama:saffron-vaults",
     "defillama:sakuraswap-amm",
     "defillama:sakuraswap-clmm",
