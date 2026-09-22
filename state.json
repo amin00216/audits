@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-09-22T13:33:27.983843+00:00",
+  "last_digest_at": "2026-09-22T17:52:48.877441+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -389,6 +389,7 @@
     "defillama:dialectic",
     "defillama:diamond-finance",
     "defillama:digift",
+    "defillama:digital-gold",
     "defillama:dinari",
     "defillama:dinero-(pxeth)",
     "defillama:dipcoin-perps",
@@ -541,6 +542,7 @@
     "defillama:glowswap",
     "defillama:gmd-protocol",
     "defillama:gmtrade",
+    "defillama:gmx-solana",
     "defillama:gmx-v1-perps",
     "defillama:gmx-v2-perps",
     "defillama:gnosis-protocol-v1",
@@ -1229,6 +1231,7 @@
     "defillama:ston.fi",
     "defillama:stoneusd",
     "defillama:stonkbrokers",
+    "defillama:stonkbrokers-safety-deposit-box",
     "defillama:stonx",
     "defillama:storm-trade",
     "defillama:strat-perps",
