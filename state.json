@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-09-22T08:10:04.407716+00:00",
+  "last_digest_at": "2026-09-22T13:33:27.983843+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -656,6 +656,7 @@
     "defillama:iotube",
     "defillama:iziswap",
     "defillama:jagpool-staked-sol",
+    "defillama:japan-staked-sol",
     "defillama:jito-liquid-staking",
     "defillama:jito-restaking",
     "defillama:joe-dex",
@@ -1186,6 +1187,7 @@
     "defillama:spiko",
     "defillama:splash-protocol",
     "defillama:splashing-stake",
+    "defillama:spookyswap-v2",
     "defillama:sport.fun",
     "defillama:springsui",
     "defillama:ssv-network",
