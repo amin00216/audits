@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-09-22T23:25:43.827616+00:00",
+  "last_digest_at": "2026-09-23T07:09:34.730674+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -132,6 +132,7 @@
     "defillama:architect",
     "defillama:arcus-perps",
     "defillama:arena-dex",
+    "defillama:argus-world",
     "defillama:arkadiko",
     "defillama:arkis",
     "defillama:armitage-by-wintermute",
@@ -250,6 +251,7 @@
     "defillama:blast-bridge",
     "defillama:blast-pre-launch-farm",
     "defillama:blazestake",
+    "defillama:blazeswap",
     "defillama:blend-pools-v2",
     "defillama:block-analitica",
     "defillama:blockchain-capital",
