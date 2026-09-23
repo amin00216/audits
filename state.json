@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-09-23T17:39:30.779102+00:00",
+  "last_digest_at": "2026-09-23T23:26:22.720220+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -604,6 +604,7 @@
     "defillama:htx",
     "defillama:hubble",
     "defillama:hubra-staked-sol",
+    "defillama:huma",
     "defillama:huma-finance-v2",
     "defillama:hybra-v4",
     "defillama:hydration-dex",
@@ -687,6 +688,7 @@
     "defillama:k3-capital",
     "defillama:kai-finance",
     "defillama:kaio",
+    "defillama:kamino-institutional-yield",
     "defillama:kamino-lend",
     "defillama:kamino-liquidity",
     "defillama:kamui",
