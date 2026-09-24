@@ -2,7 +2,17 @@
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
   "last_digest_at": "2026-09-24T17:42:20.852347+00:00",
-  "pending_new_bounty_programs": [],
+  "pending_new_bounty_programs": [
+    {
+      "id": "HackerOne:live_nation",
+      "launched_at": "2026-09-24T19:55:50.215Z",
+      "name": "Live Nation",
+      "platform": "HackerOne",
+      "prize": "200-10,000 USD",
+      "status": "open",
+      "url": "https://hackerone.com/live_nation"
+    }
+  ],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
     "HackenProof:Ample Smart Contracts",
@@ -29,6 +39,7 @@
     "HackerOne:common_codes",
     "HackerOne:coupang_tw",
     "HackerOne:kaltura",
+    "HackerOne:live_nation",
     "HackerOne:meesho_bbp",
     "HackerOne:twilio",
     "HackerOne:unico_idtech",
