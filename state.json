@@ -1,18 +1,8 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-09-24T17:42:20.852347+00:00",
-  "pending_new_bounty_programs": [
-    {
-      "id": "HackerOne:live_nation",
-      "launched_at": "2026-09-24T19:55:50.215Z",
-      "name": "Live Nation",
-      "platform": "HackerOne",
-      "prize": "200-10,000 USD",
-      "status": "open",
-      "url": "https://hackerone.com/live_nation"
-    }
-  ],
+  "last_digest_at": "2026-09-24T23:57:02.250171+00:00",
+  "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
     "HackenProof:Ample Smart Contracts",
@@ -1030,6 +1020,7 @@
     "defillama:polygon-zkevm-bridge",
     "defillama:polymarket-international",
     "defillama:polynomial-trade",
+    "defillama:pondo-protocol",
     "defillama:pools-finance",
     "defillama:pooltogether-v3",
     "defillama:pooltogether-v5",
