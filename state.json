@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-09-24T12:49:48.466358+00:00",
+  "last_digest_at": "2026-09-24T17:42:20.852347+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -28,6 +28,7 @@
     "HackerOne:coinmate",
     "HackerOne:common_codes",
     "HackerOne:coupang_tw",
+    "HackerOne:kaltura",
     "HackerOne:meesho_bbp",
     "HackerOne:twilio",
     "HackerOne:unico_idtech",
@@ -171,6 +172,7 @@
     "defillama:axelar",
     "defillama:axelar-cross-chain",
     "defillama:axis",
+    "defillama:azuro",
     "defillama:azverse-perps",
     "defillama:b.protocol",
     "defillama:b14g",
