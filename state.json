@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-09-25T09:00:02.015508+00:00",
+  "last_digest_at": "2026-09-25T14:32:02.552570+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -1070,6 +1070,7 @@
     "defillama:raydium-amm",
     "defillama:re",
     "defillama:re7-labs",
+    "defillama:reactor-dex",
     "defillama:realms",
     "defillama:realt-rmm-marketplace-v2",
     "defillama:realt-tokens",
