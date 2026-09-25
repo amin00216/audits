@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-09-24T23:57:02.250171+00:00",
+  "last_digest_at": "2026-09-25T09:00:02.015508+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -1472,6 +1472,7 @@
     "defillama:xflows",
     "defillama:xgld",
     "defillama:xion-finance",
+    "defillama:xoxno-lending",
     "defillama:xoxno-liquid-staking",
     "defillama:xrpl-dex",
     "defillama:xsy",
