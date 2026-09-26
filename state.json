@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-09-26T06:19:32.146997+00:00",
+  "last_digest_at": "2026-09-26T11:38:05.603414+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -1187,6 +1187,7 @@
     "defillama:solv-strategies",
     "defillama:solvbtc",
     "defillama:solvbtc-lsts",
+    "defillama:somnialend",
     "defillama:sonic-gateway",
     "defillama:sonic-icp",
     "defillama:sophon-bridge",
