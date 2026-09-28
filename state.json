@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-09-28T15:43:17.633561+00:00",
+  "last_digest_at": "2026-09-28T21:31:25.350036+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -632,6 +632,7 @@
     "defillama:hyperbeat-earn",
     "defillama:hyperbeat-lst",
     "defillama:hyperbeat-usd",
+    "defillama:hypercall",
     "defillama:hyperion",
     "defillama:hyperithm",
     "defillama:hyperlane",
