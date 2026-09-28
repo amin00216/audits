@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-09-27T22:27:11.691472+00:00",
+  "last_digest_at": "2026-09-28T07:13:29.967957+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -271,6 +271,7 @@
     "defillama:bmx-freestyle",
     "defillama:bob-bridge",
     "defillama:boba-bridge",
+    "defillama:bond",
     "defillama:bonk-staked-sol",
     "defillama:bonzo-lend",
     "defillama:boros",
