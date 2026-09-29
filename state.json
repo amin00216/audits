@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-09-28T21:31:25.350036+00:00",
+  "last_digest_at": "2026-09-29T07:11:04.543120+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -578,6 +578,7 @@
     "defillama:grxswap",
     "defillama:gtbtc",
     "defillama:guru-network-classic",
+    "defillama:haedal-lending-vault",
     "defillama:haedal-protocol",
     "defillama:haedal-vault",
     "defillama:hakka-finance",
