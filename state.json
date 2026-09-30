@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-09-30T15:41:07.523909+00:00",
+  "last_digest_at": "2026-09-30T20:31:52.933188+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -618,6 +618,7 @@
     "defillama:hope-collateral",
     "defillama:hotcoin",
     "defillama:htx",
+    "defillama:hub-capital",
     "defillama:hubble",
     "defillama:hubra-staked-sol",
     "defillama:huma",
@@ -808,6 +809,8 @@
     "defillama:longbow",
     "defillama:looped-hype",
     "defillama:loopscale",
+    "defillama:loopscale-curation",
+    "defillama:loopscale-lending",
     "defillama:lorenzo-enzobtc",
     "defillama:lorenzo-susd1+",
     "defillama:lulo",
