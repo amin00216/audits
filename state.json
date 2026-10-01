@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-10-01T13:40:56.521180+00:00",
+  "last_digest_at": "2026-10-01T19:13:11.681527+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -32,6 +32,7 @@
     "HackerOne:kaltura",
     "HackerOne:live_nation",
     "HackerOne:meesho_bbp",
+    "HackerOne:omarchy",
     "HackerOne:twilio",
     "HackerOne:unico_idtech",
     "HackerOne:vercel",
