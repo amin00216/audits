@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-09-30T20:31:52.933188+00:00",
+  "last_digest_at": "2026-10-01T06:17:45.433518+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -1175,6 +1175,7 @@
     "defillama:sharpbyte-capital",
     "defillama:shibaswap-v1",
     "defillama:shield-swap",
+    "defillama:shift-defi",
     "defillama:shmonad",
     "defillama:shui",
     "defillama:sierra-protocol",
