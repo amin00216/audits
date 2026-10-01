@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-10-01T06:17:45.433518+00:00",
+  "last_digest_at": "2026-10-01T13:40:56.521180+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -1019,6 +1019,7 @@
     "defillama:phase-stake",
     "defillama:phemex",
     "defillama:phoenix-spot",
+    "defillama:phos-swap",
     "defillama:phux",
     "defillama:pickle",
     "defillama:pico-staked-sol",
