@@ -1,0 +1,3 @@
+[warn] GET https://audits.sherlock.xyz/api/contests?order_by_date=false&page=1&per_page=50 failed: HTTP Error 525: status code 525
+Errors:
+Sherlock: fetch/parse failed (down, blocked, or shape changed)

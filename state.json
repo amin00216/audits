@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-10-01T23:18:45.105124+00:00",
+  "last_digest_at": "2026-10-02T08:46:34.895473+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -147,6 +147,7 @@
     "defillama:armitage-by-wintermute",
     "defillama:arrakis-modular",
     "defillama:arrakis-v1",
+    "defillama:arrowfarm",
     "defillama:ascend",
     "defillama:asseto-aoabt",
     "defillama:asseto-cash+",
@@ -231,6 +232,7 @@
     "defillama:bisonfi",
     "defillama:biswap-v2",
     "defillama:bitbond-lockers",
+    "defillama:bitbond-sales",
     "defillama:bitfi-basis",
     "defillama:bitfi-btc",
     "defillama:bitfinex",
