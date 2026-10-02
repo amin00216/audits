@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-10-02T15:16:03.377798+00:00",
+  "last_digest_at": "2026-10-02T20:03:07.378029+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -424,6 +424,7 @@
     "defillama:dreamdex",
     "defillama:drift-staked-sol",
     "defillama:dswap",
+    "defillama:dtrinity-dlend",
     "defillama:dtrinity-dusd",
     "defillama:dxsale",
     "defillama:dydx-v3",
