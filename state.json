@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-10-02T08:46:34.895473+00:00",
+  "last_digest_at": "2026-10-02T15:16:03.377798+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -484,6 +484,7 @@
     "defillama:extra-finance-vaults",
     "defillama:extra-finance-xlend",
     "defillama:fables",
+    "defillama:faiyah-staking",
     "defillama:fake-world-assets",
     "defillama:fake-world-assets-v2",
     "defillama:falcon-finance",
@@ -726,6 +727,7 @@
     "defillama:kava-lend",
     "defillama:kava-liquid",
     "defillama:kava-mint",
+    "defillama:kayen-finance-v3",
     "defillama:kea-credit",
     "defillama:keep3r-network",
     "defillama:kelp",
