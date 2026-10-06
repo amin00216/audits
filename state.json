@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-10-06T14:20:08.288598+00:00",
+  "last_digest_at": "2026-10-06T19:39:12.761830+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -247,6 +247,7 @@
     "defillama:bitmart",
     "defillama:bitmex",
     "defillama:bitrue",
+    "defillama:bitsafe-cbtc",
     "defillama:bitstamp",
     "defillama:bittensor-dtao",
     "defillama:bitu-protocol",
