@@ -1,7 +1,7 @@
 {
   "bootstrapped": true,
   "bounty_programs_bootstrapped": true,
-  "last_digest_at": "2026-10-06T07:05:29.808813+00:00",
+  "last_digest_at": "2026-10-06T14:20:08.288598+00:00",
   "pending_new_bounty_programs": [],
   "seen_bounty_programs": [
     "HackenProof:ADI Predictstreet Smart Contracts",
@@ -286,6 +286,7 @@
     "defillama:brickken",
     "defillama:bridgers",
     "defillama:bscswap",
+    "defillama:btb-finance",
     "defillama:btcfi-cdp",
     "defillama:btcst",
     "defillama:btse",
